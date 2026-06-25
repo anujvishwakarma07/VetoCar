@@ -1,0 +1,12 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "This is AI_LLM Based Car lease contract review and Negotataion Assistant application, we are going to build",
+  "license": "ISC",
+  "author": "Anuj Vishwakarma",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm start"
+  }
+}
