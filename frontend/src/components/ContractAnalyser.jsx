@@ -127,14 +127,14 @@ const ContractAnalyzer = ({ contractResult, setContractResult, setChatMessages }
           {contractFile ? (
             <div>
               <p style={{ fontWeight: 600 }}>{contractFile.name}</p>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>
+              <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>
                 {(contractFile.size / 1024 / 1024).toFixed(2)} MB - Click to replace
               </p>
             </div>
           ) : (
             <div>
               <p style={{ fontWeight: 600 }}>Drag & Drop your Lease/Loan PDF here</p>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>or click to browse files</p>
+              <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>or click to browse files</p>
             </div>
           )}
           <input
@@ -184,7 +184,7 @@ const ContractAnalyzer = ({ contractResult, setContractResult, setChatMessages }
               </div>
             </div>
 
-            <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: '1.6', marginBottom: '24px' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '15px', lineHeight: '1.6', marginBottom: '24px' }}>
               {contractResult.analysis.fairnessExplanation}
             </p>
 
@@ -193,9 +193,9 @@ const ContractAnalyzer = ({ contractResult, setContractResult, setChatMessages }
               Red Flags & Warnings
             </h4>
             {contractResult.analysis.redFlags && contractResult.analysis.redFlags.length > 0 ? (
-              <ul style={{ paddingLeft: '20px', color: 'var(--text-secondary)' }}>
+              <ul style={{ paddingLeft: '20px', color: 'var(--text-muted)' }}>
                 {contractResult.analysis.redFlags.map((flag, idx) => (
-                  <li key={idx} style={{ marginBottom: '8px', color: '#fda4af' }}>{flag}</li>
+                  <li key={idx} style={{ marginBottom: '8px', color: 'var(--danger)' }}>{flag}</li>
                 ))}
               </ul>
             ) : (
@@ -248,8 +248,8 @@ const ContractAnalyzer = ({ contractResult, setContractResult, setChatMessages }
             </table>
 
             {contractResult.analysis.maintenanceResponsibility && (
-              <div style={{ marginTop: '20px', padding: '12px', background: 'var(--bg-surface-hover)', borderRadius: 'var(--radius-md)' }}>
-                <p style={{ fontSize: '13px', color: 'var(--text-secondary)' }}><strong>Maintenance:</strong> {contractResult.analysis.maintenanceResponsibility}</p>
+              <div style={{ marginTop: '20px', padding: '12px', background: 'var(--bg-hover)', borderRadius: 'var(--radius-md)' }}>
+                <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}><strong>Maintenance:</strong> {contractResult.analysis.maintenanceResponsibility}</p>
               </div>
             )}
           </div>

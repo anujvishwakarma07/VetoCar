@@ -4,10 +4,12 @@ import {
   Car, 
   MessageSquare, 
   Sparkles,
-  LogOut
+  LogOut,
+  Sun,
+  Moon
 } from 'lucide-react';
 
-const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser }) => {
+const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, theme, toggleTheme }) => {
   const handleSignOut = () => {
     if (setIsAuthenticated) setIsAuthenticated(false);
     if (setUser) setUser(null);
@@ -19,7 +21,7 @@ const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser }) => {
       {/* Brand Logo */}
       <div className="sidebar-logo">
         <Sparkles size={24} />
-        <span>CarLease AI</span>
+        <span>VetoCar</span>
       </div>
 
       {/* Menu Options */}
@@ -56,11 +58,21 @@ const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser }) => {
           <span>Negotiation Coach</span>
         </div>
 
+        {/* Theme Toggle Button */}
+        <div 
+          className="sidebar-item desktop-only" 
+          onClick={toggleTheme}
+          style={{ marginTop: 'auto', borderTop: '1px solid var(--border)' }}
+        >
+          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+          <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+        </div>
+
         {/* Dynamic Log Out Button */}
         <div 
           className="sidebar-item" 
           onClick={handleSignOut}
-          style={{ marginTop: 'auto', color: 'var(--text-dim)' }}
+          style={{ color: 'var(--text-dim)' }}
         >
           <LogOut size={20} />
           <span>Sign Out</span>

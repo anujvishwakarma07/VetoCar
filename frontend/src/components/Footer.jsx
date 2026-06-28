@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="footer-brand-section">
           <div className="footer-brand">
             <Sparkles size={16} className="footer-brand-icon" />
-            <span className="footer-brand-title">CARLEASE AI</span>
+            <span className="footer-brand-title">VETOCAR</span>
             <span className="footer-brand-version">// SYS_VER.1.0.4</span>
           </div>
           <p className="footer-disclaimer">
@@ -51,7 +51,7 @@ const Footer = () => {
 
       <div className="footer-bottom">
         <span className="footer-copyright">
-          © {new Date().getFullYear()} CARLEASE AI. STARK ARCHITECT SYSTEM. ALL RIGHTS RESERVED.
+          © {new Date().getFullYear()} VETOCAR. STARK ARCHITECT SYSTEM. ALL RIGHTS RESERVED.
         </span>
         <span className="footer-design-tag">
           DESIGNED FOR AUTOMOTIVE INTELLIGENCE

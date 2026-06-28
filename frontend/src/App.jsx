@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Sun, Moon } from 'lucide-react';
 import Sidebar from './components/Sidebar.jsx';
 import DashboardView from './components/DashboardView.jsx';
 import ContractAnalyser from './components/ContractAnalyser.jsx';
@@ -10,6 +10,18 @@ import AuthView from './components/AuthView.jsx';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
+  
+  // Theme state persisted in localStorage
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
   const [contractResult, setContractResult] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
@@ -51,7 +63,24 @@ function App() {
     <div className="dashboard-layout">
       <div className="mobile-header">
         <Sparkles size={18} style={{ color: 'var(--primary)' }} />
-        <span>CarLease AI</span>
+        <span>VetoCar</span>
+        <button 
+          onClick={toggleTheme} 
+          style={{ 
+            marginLeft: 'auto', 
+            background: 'none', 
+            border: 'none', 
+            color: 'var(--text-main)', 
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '8px'
+          }}
+          aria-label="Toggle theme"
+        >
+          {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+        </button>
       </div>
 
       <Sidebar 
@@ -59,6 +88,8 @@ function App() {
         setActiveTab={setActiveTab} 
         setIsAuthenticated={setIsAuthenticated} 
         setUser={setUser}
+        theme={theme}
+        toggleTheme={toggleTheme}
       />
 
       <div className="main-content">

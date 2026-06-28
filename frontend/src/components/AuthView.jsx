@@ -93,7 +93,7 @@ const AuthView = ({ setIsAuthenticated, setUser }) => {
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
             <Sparkles size={24} style={{ color: 'var(--primary)' }} />
             <span style={{ fontSize: '18px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.15em' }}>
-              CarLease AI
+              VetoCar
             </span>
           </div>
           <p style={{ color: 'var(--text-muted)', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: 'var(--font-mono)' }}>

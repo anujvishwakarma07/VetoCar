@@ -73,7 +73,7 @@ const VinLookup = () => {
         </form>
 
         {vinError && (
-          <div className="flag-item" style={{ marginTop: '16px', color: '#fca5a5' }}>
+          <div className="flag-item" style={{ marginTop: '16px' }}>
             <AlertCircle size={20} />
             <span>{vinError}</span>
           </div>
@@ -124,7 +124,7 @@ const VinLookup = () => {
             </table>
           </div>
 
-          <div style={{ display: 'flex', gap: '10px', marginTop: '32px', padding: '16px', backgroundColor: 'rgba(255, 255, 255, 0.02)', borderRadius: '12px', border: '1px solid var(--border)' }}>
+          <div style={{ display: 'flex', gap: '10px', marginTop: '32px', padding: '16px', backgroundColor: 'var(--bg-hover)', borderRadius: '12px', border: '1px solid var(--border)' }}>
             <Info size={20} style={{ color: 'var(--primary)', flexShrink: 0 }} />
             <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: '1.5' }}>
               Specifications are retrieved directly from the public database of the National Highway Traffic Safety Administration (NHTSA). Please cross-verify with your physical vehicle to ensure accuracy.

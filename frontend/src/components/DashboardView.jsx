@@ -14,7 +14,7 @@ const DashboardView = ({ setActiveTab }) => {
           </h1>
           
           <p style={{ color: 'var(--text-muted)', fontSize: '15px', lineHeight: '1.7', marginBottom: '32px', maxWidth: '480px' }}>
-            CarLease AI extracts terms, isolates hidden dealer fees, and gives you exact, tailored conversation scripts to drop your monthly lease payments.
+            VetoCar extracts terms, isolates hidden dealer fees, and gives you exact, tailored conversation scripts to drop your monthly lease payments.
           </p>
 
           <div className="home-hero-buttons">
