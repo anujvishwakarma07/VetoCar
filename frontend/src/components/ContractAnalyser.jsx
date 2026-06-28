@@ -40,7 +40,7 @@ const ContractAnalyzer = ({ contractResult, setContractResult, setChatMessages }
     e.preventDefault();
     e.stopPropagation();
     setDragging(false);
-    
+
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const file = e.dataTransfer.files[0];
       if (file.type === "application/pdf") {
@@ -77,6 +77,9 @@ const ContractAnalyzer = ({ contractResult, setContractResult, setChatMessages }
     try {
       const response = await fetch(`${API_URL}/contracts/upload`, {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
         body: formData,
       });
 
@@ -113,7 +116,7 @@ const ContractAnalyzer = ({ contractResult, setContractResult, setChatMessages }
 
       {/* Upload Box */}
       <div className="card">
-        <div 
+        <div
           className={`drop-zone ${dragging ? 'dragging' : ''}`}
           onDragOver={handleDrag}
           onDragLeave={handleDrag}
@@ -134,11 +137,11 @@ const ContractAnalyzer = ({ contractResult, setContractResult, setChatMessages }
               <p style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>or click to browse files</p>
             </div>
           )}
-          <input 
-            type="file" 
-            ref={fileInputRef} 
-            onChange={handleFileChange} 
-            accept="application/pdf" 
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            accept="application/pdf"
             style={{ display: 'none' }}
           />
         </div>
@@ -146,9 +149,9 @@ const ContractAnalyzer = ({ contractResult, setContractResult, setChatMessages }
         {uploadError && <p style={{ color: 'var(--danger)', marginTop: '12px' }}>{uploadError}</p>}
 
         {contractFile && (
-          <button 
-            className="btn" 
-            onClick={handleAnalyze} 
+          <button
+            className="btn"
+            onClick={handleAnalyze}
             disabled={analyzing}
             style={{ marginTop: '20px', width: '100%', justifyContent: 'center' }}
           >
@@ -166,11 +169,11 @@ const ContractAnalyzer = ({ contractResult, setContractResult, setChatMessages }
       {/* Analysis Results Display */}
       {contractResult && (
         <div className="analysis-grid">
-          
+
           {/* Left Card: Score and Red Flags */}
           <div className="card">
             <h3 style={{ marginBottom: '20px' }}>Deal Fairness & Assessment</h3>
-            
+
             <div className="score-radial">
               <div className={`score-circle ${getScoreClass(contractResult.analysis.fairnessScore)}`}>
                 {contractResult.analysis.fairnessScore ?? 'N/A'}
@@ -243,7 +246,7 @@ const ContractAnalyzer = ({ contractResult, setContractResult, setChatMessages }
                 </tr>
               </tbody>
             </table>
-            
+
             {contractResult.analysis.maintenanceResponsibility && (
               <div style={{ marginTop: '20px', padding: '12px', background: 'var(--bg-surface-hover)', borderRadius: 'var(--radius-md)' }}>
                 <p style={{ fontSize: '13px', color: 'var(--text-secondary)' }}><strong>Maintenance:</strong> {contractResult.analysis.maintenanceResponsibility}</p>

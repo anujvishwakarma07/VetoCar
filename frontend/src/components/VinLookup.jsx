@@ -18,9 +18,12 @@ const VinLookup = () => {
     setVinResult(null);
 
     try {
-      const response = await fetch(`${API_URL}/vin/decode/${vinInput.trim()}`);
+      const response = await fetch(`${API_URL}/vin/decode/${vinInput.trim()}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       const data = await response.json();
-
       if (!response.ok) {
         throw new Error(data.error || 'Invalid VIN or service error.');
       }
@@ -47,10 +50,10 @@ const VinLookup = () => {
           <Search size={20} style={{ color: 'var(--primary)' }} />
           Verify Vehicle Specifications
         </h3>
-        
+
         <form onSubmit={handleDecodeVin} className="input-group">
-          <input 
-            type="text" 
+          <input
+            type="text"
             className="form-input"
             placeholder="Enter 17-character VIN Number (e.g. 1FTMW1T88MFA00001)..."
             value={vinInput}
@@ -68,7 +71,7 @@ const VinLookup = () => {
             )}
           </button>
         </form>
-        
+
         {vinError && (
           <div className="flag-item" style={{ marginTop: '16px', color: '#fca5a5' }}>
             <AlertCircle size={20} />
@@ -84,7 +87,7 @@ const VinLookup = () => {
             <Car size={20} style={{ color: 'var(--primary)' }} />
             NHTSA Decoded Specifications
           </h3>
-          
+
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px' }}>
             <table className="parameters-table">
               <tbody>
@@ -102,7 +105,7 @@ const VinLookup = () => {
                 </tr>
               </tbody>
             </table>
-            
+
             <table className="parameters-table">
               <tbody>
                 <tr>

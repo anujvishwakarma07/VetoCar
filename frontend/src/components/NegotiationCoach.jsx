@@ -3,7 +3,7 @@ import { Bot, User, Send, CheckCircle2, Sparkles } from 'lucide-react';
 
 const parseMarkdown = (text) => {
   if (!text) return '';
-  
+
   // Escape basic HTML to prevent XSS injections
   let escaped = text
     .replace(/&/g, "&amp;")
@@ -18,22 +18,22 @@ const parseMarkdown = (text) => {
 
   // 2. Convert markdown bold (**text**) to HTML strong
   formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  
+
   // 3. Convert markdown inline code (`code`) to HTML code tag
   formatted = formatted.replace(/`(.*?)`/g, '<code>$1</code>');
 
   // 4. Convert markdown bullet points (* text or - text) to bullet characters (• text)
   formatted = formatted.replace(/^\s*[\*\-]\s+(.*)$/gm, '• $1');
-  
+
   return formatted;
 };
 
-const NegotiationCoach = ({ 
-  contractResult, 
-  chatMessages, 
-  setChatMessages, 
-  chatHistory, 
-  setChatHistory 
+const NegotiationCoach = ({
+  contractResult,
+  chatMessages,
+  setChatMessages,
+  chatHistory,
+  setChatHistory
 }) => {
   const [chatInput, setChatInput] = useState('');
   const [sendingChat, setSendingChat] = useState(false);
@@ -67,7 +67,10 @@ const NegotiationCoach = ({
 
       const response = await fetch(`${API_URL}/chat`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
         body: JSON.stringify(payload),
       });
 
@@ -108,7 +111,7 @@ const NegotiationCoach = ({
       {/* Contract Context Notification Bar */}
       {contractResult && (
         <div className="badge badge-success" style={{ marginBottom: '24px', gap: '8px', display: 'inline-flex', textTransform: 'none', padding: '8px 16px', borderRadius: '10px' }}>
-          <CheckCircle2 size={16} /> 
+          <CheckCircle2 size={16} />
           <span>Loaded Contract Context: <strong>{contractResult.analysis.year} {contractResult.analysis.make} {contractResult.analysis.model}</strong></span>
         </div>
       )}
@@ -117,20 +120,20 @@ const NegotiationCoach = ({
       <div className="chat-container">
         <div className="chat-messages">
           {chatMessages.map((msg, idx) => (
-            <div key={idx} style={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
+            <div key={idx} style={{
+              display: 'flex',
+              flexDirection: 'column',
               alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
               maxWidth: '80%'
             }}>
               {/* Header outside bubble */}
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '6px', 
-                marginBottom: '4px', 
-                fontSize: '10px', 
-                opacity: 0.6, 
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                marginBottom: '4px',
+                fontSize: '10px',
+                opacity: 0.6,
                 fontWeight: 700,
                 textTransform: 'uppercase',
                 letterSpacing: '0.08em',
@@ -152,14 +155,14 @@ const NegotiationCoach = ({
 
               {/* Chat bubble containing text only */}
               <div className={`chat-message ${msg.role}`}>
-                <div 
+                <div
                   style={{ whiteSpace: 'pre-line', fontSize: '13px', lineHeight: '1.5' }}
                   dangerouslySetInnerHTML={{ __html: parseMarkdown(msg.text) }}
                 />
               </div>
             </div>
           ))}
-          
+
           {sendingChat && (
             <div className="chat-message bot">
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', fontSize: '12px', opacity: 0.8, fontWeight: 600 }}>
@@ -177,8 +180,8 @@ const NegotiationCoach = ({
 
         {/* Input Bar */}
         <form onSubmit={handleSendChat} className="chat-input-area">
-          <input 
-            type="text" 
+          <input
+            type="text"
             className="form-input"
             placeholder={contractResult ? "Ask about negotiating this specific offer..." : "Ask the coach anything (e.g. 'Is $500 doc fee too high?')..."}
             value={chatInput}

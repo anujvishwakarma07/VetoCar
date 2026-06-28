@@ -1,13 +1,19 @@
-import React from 'react';
 import { 
   LayoutDashboard, 
   FileSearch, 
   Car, 
   MessageSquare, 
-  Sparkles 
+  Sparkles,
+  LogOut
 } from 'lucide-react';
 
-const Sidebar = ({ activeTab, setActiveTab }) => {
+const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser }) => {
+  const handleSignOut = () => {
+    if (setIsAuthenticated) setIsAuthenticated(false);
+    if (setUser) setUser(null);
+    localStorage.removeItem('token');
+  };
+
   return (
     <div className="sidebar">
       {/* Brand Logo */}
@@ -48,6 +54,16 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
         >
           <MessageSquare size={20} />
           <span>Negotiation Coach</span>
+        </div>
+
+        {/* Dynamic Log Out Button */}
+        <div 
+          className="sidebar-item" 
+          onClick={handleSignOut}
+          style={{ marginTop: 'auto', color: 'var(--text-dim)' }}
+        >
+          <LogOut size={20} />
+          <span>Sign Out</span>
         </div>
       </div>
     </div>
