@@ -39,7 +39,7 @@ const NegotiationCoach = ({
   const [sendingChat, setSendingChat] = useState(false);
   const chatEndRef = useRef(null);
 
-  const API_URL = 'http://localhost:8080/api';
+  const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:8080/api';
 
   // Automatically scroll chat to bottom when messages are added
   useEffect(() => {

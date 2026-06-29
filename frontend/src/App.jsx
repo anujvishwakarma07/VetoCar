@@ -8,6 +8,12 @@ import NegotiationCoach from './components/NegotiationCoach.jsx';
 import Footer from './components/Footer.jsx';
 import AuthView from './components/AuthView.jsx';
 import OfferComparision from './components/OfferComparision.jsx';
+import { Agentation } from 'agentation';
+
+import darkModeLogo from './assets/darkModeTextual.png';
+import lightModeLogo from './assets/LightModeTextual.png';
+import darkModeSymbol from './assets/darkModeSymbolic.png';
+import lightModeSymbol from './assets/lightModeSybolic.png';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -51,82 +57,120 @@ function App() {
   ]);
   const [chatHistory, setChatHistory] = useState([]);
 
-  if (!isAuthenticated) {
-    return (
-      <AuthView
-        setIsAuthenticated={setIsAuthenticated}
-        setUser={setUser}
-      />
-    );
-  }
+  // Scroll to top of the content container on tab switches
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    const mainContent = document.querySelector('.main-content');
+    if (mainContent) {
+      mainContent.scrollTop = 0;
+    }
+  }, [activeTab]);
+
+  // Auto-redirect to home dashboard upon login success
+  useEffect(() => {
+    if (isAuthenticated) {
+      setActiveTab('dashboard');
+    }
+  }, [isAuthenticated]);
 
   return (
-    <div className="dashboard-layout">
-      <div className="mobile-header">
-        <Sparkles size={18} style={{ color: 'var(--primary)' }} />
-        <span>VetoCar</span>
-        <button
-          onClick={toggleTheme}
-          style={{
-            marginLeft: 'auto',
-            background: 'none',
-            border: 'none',
-            color: 'var(--text-main)',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '8px'
-          }}
-          aria-label="Toggle theme"
-        >
-          {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-        </button>
+    <>
+      <Agentation />
+      <div className="dashboard-layout">
+        <div className="mobile-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <img 
+              src={theme === 'dark' ? darkModeSymbol : lightModeSymbol} 
+              alt="VetoCar Mark" 
+              style={{ height: '25px', objectFit: 'contain' }} 
+            />
+            <img 
+              src={theme === 'dark' ? darkModeLogo : lightModeLogo} 
+              alt="VetoCar Logo" 
+              style={{ height: '18px', objectFit: 'contain' }} 
+            />
+          </div>
+          <button
+            onClick={toggleTheme}
+            style={{
+              marginLeft: 'auto',
+              background: 'none',
+              border: 'none',
+              color: 'var(--text-main)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '8px'
+            }}
+            aria-label="Toggle theme"
+          >
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+        </div>
+
+        <Sidebar
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          setIsAuthenticated={setIsAuthenticated}
+          setUser={setUser}
+          theme={theme}
+          toggleTheme={toggleTheme}
+          isAuthenticated={isAuthenticated}
+        />
+
+        <div className="main-content">
+          {activeTab === 'dashboard' && (
+            <DashboardView setActiveTab={setActiveTab} />
+          )}
+
+          {activeTab === 'analyzer' && (
+            isAuthenticated ? (
+              <ContractAnalyser
+                contractResult={contractResult}
+                setContractResult={setContractResult}
+                setChatMessages={setChatMessages}
+              />
+            ) : (
+              <AuthView setIsAuthenticated={setIsAuthenticated} setUser={setUser} />
+            )
+          )}
+
+          {activeTab === 'vin' && (
+            isAuthenticated ? (
+              <VinLookup />
+            ) : (
+              <AuthView setIsAuthenticated={setIsAuthenticated} setUser={setUser} />
+            )
+          )}
+
+          {activeTab === 'coach' && (
+            isAuthenticated ? (
+              <NegotiationCoach
+                contractResult={contractResult}
+                chatMessages={chatMessages}
+                setChatMessages={setChatMessages}
+                chatHistory={chatHistory}
+                setChatHistory={setChatHistory}
+              />
+            ) : (
+              <AuthView setIsAuthenticated={setIsAuthenticated} setUser={setUser} />
+            )
+          )}
+
+          {activeTab === 'compare' && (
+            isAuthenticated ? (
+              <OfferComparision />
+            ) : (
+              <AuthView setIsAuthenticated={setIsAuthenticated} setUser={setUser} />
+            )
+          )}
+          <Footer theme={theme} />
+        </div>
       </div>
-
-      <Sidebar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        setIsAuthenticated={setIsAuthenticated}
-        setUser={setUser}
-        theme={theme}
-        toggleTheme={toggleTheme}
-      />
-
-      <div className="main-content">
-        {activeTab === 'dashboard' && (
-          <DashboardView setActiveTab={setActiveTab} />
-        )}
-
-        {activeTab === 'analyzer' && (
-          <ContractAnalyser
-            contractResult={contractResult}
-            setContractResult={setContractResult}
-            setChatMessages={setChatMessages}
-          />
-        )}
-
-        {activeTab === 'vin' && (
-          <VinLookup />
-        )}
-
-        {activeTab === 'coach' && (
-          <NegotiationCoach
-            contractResult={contractResult}
-            chatMessages={chatMessages}
-            setChatMessages={setChatMessages}
-            chatHistory={chatHistory}
-            setChatHistory={setChatHistory}
-          />
-        )}
-
-        {activeTab === 'compare' && (
-          <OfferComparision />
-        )}
-        <Footer />
-      </div>
-    </div>
+    </>
   );
+
 }
 
 export default App;

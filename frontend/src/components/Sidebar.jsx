@@ -1,16 +1,21 @@
+import React from 'react';
 import {
   LayoutDashboard,
   FileSearch,
   Car,
   MessageSquare,
-  Sparkles,
   LogOut,
   Sun,
   Moon,
   GitCompare,
 } from 'lucide-react';
 
-const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, theme, toggleTheme }) => {
+import darkModeLogo from '../assets/darkModeTextual.png';
+import lightModeLogo from '../assets/LightModeTextual.png';
+import darkModeSymbol from '../assets/darkModeSymbolic.png';
+import lightModeSymbol from '../assets/lightModeSybolic.png';
+
+const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, theme, toggleTheme, isAuthenticated }) => {
   const handleSignOut = () => {
     if (setIsAuthenticated) setIsAuthenticated(false);
     if (setUser) setUser(null);
@@ -20,9 +25,17 @@ const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, theme, 
   return (
     <div className="sidebar">
       {/* Brand Logo */}
-      <div className="sidebar-logo">
-        <Sparkles size={24} />
-        <span>VetoCar</span>
+      <div className="sidebar-logo" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
+        <img 
+          src={theme === 'dark' ? darkModeSymbol : lightModeSymbol} 
+          alt="VetoCar Mark" 
+          style={{ height: '35px', width: 'auto', objectFit: 'contain' }} 
+        />
+        <img 
+          src={theme === 'dark' ? darkModeLogo : lightModeLogo} 
+          alt="VetoCar Logo" 
+          style={{ height: '20px', width: 'auto', objectFit: 'contain' }} 
+        />
       </div>
 
       {/* Menu Options */}
@@ -78,14 +91,16 @@ const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, theme, 
         </div>
 
         {/* Dynamic Log Out Button */}
-        <div
-          className="sidebar-item"
-          onClick={handleSignOut}
-          style={{ color: 'var(--text-dim)' }}
-        >
-          <LogOut size={20} />
-          <span>Sign Out</span>
-        </div>
+        {isAuthenticated && (
+          <div
+            className="sidebar-item"
+            onClick={handleSignOut}
+            style={{ color: 'var(--text-dim)' }}
+          >
+            <LogOut size={20} />
+            <span>Sign Out</span>
+          </div>
+        )}
       </div>
     </div>
   );

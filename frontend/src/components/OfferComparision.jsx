@@ -7,12 +7,75 @@ const OfferComparision = () => {
     const [dealBId, setDealBId] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    const [uploadingA, setUploadingA] = useState(false);
+    const [uploadingB, setUploadingB] = useState(false);
+    const [uploadError, setUploadError] = useState('');
+
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const handleUploadDirect = async (e, target) => {
+        if (!e.target.files || !e.target.files[0]) return;
+        const file = e.target.files[0];
+        
+        if (file.type !== "application/pdf") {
+            setUploadError('Only PDF files are supported for upload.');
+            return;
+        }
+
+        setUploadError('');
+        if (target === 'A') setUploadingA(true);
+        else setUploadingB(true);
+
+        const formData = new FormData();
+        formData.append('contract', file);
+
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_URL}/api/contracts/upload`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || 'Failed to analyze contract');
+            }
+
+            // Append to local contract list
+            setContract(prev => [data, ...prev]);
+
+            // Auto-select the newly analyzed contract ID
+            if (target === 'A') {
+                setDealAId(data._id);
+            } else {
+                setDealBId(data._id);
+            }
+
+        } catch (err) {
+            console.error('Error uploading contract directly:', err);
+            setUploadError(err.message || 'Something went wrong during upload.');
+        } finally {
+            if (target === 'A') setUploadingA(false);
+            else setUploadingB(false);
+        }
+    };
 
     useEffect(() => {
         const fetchContract = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const res = await fetch('http://localhost:8080/api/contracts', {
+                const res = await fetch(`${API_URL}/api/contracts`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -87,7 +150,7 @@ const OfferComparision = () => {
     const recommendation = getRecommendation();
 
     return (
-        <div style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto', color: 'var(--text-main)' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', color: 'var(--text-main)' }}>
             {/* Header */}
             <div style={{ marginBottom: '32px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
@@ -116,49 +179,109 @@ const OfferComparision = () => {
             )}
             {!loading && !error && (
                 <>
-                    {/* Dropdowns */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '32px' }}>
-                        <div className="card" style={{ padding: '20px', borderRadius: '0px' }}>
-                            <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '10px', fontFamily: 'var(--font-mono)' }}>
-                                Select Deal A //
-                            </label>
-                            <select
-                                value={dealAId}
-                                onChange={(e) => setDealAId(e.target.value)}
-                                className="form-input"
-                                style={{ width: '100%' }}
-                            >
-                                <option value="">-- Choose first audited contract --</option>
-                                {contract
-                                    .filter(c => c._id !== dealBId)
-                                    .map(c => (
-                                        <option key={c._id} value={c._id}>
-                                            {c.fileName} (Score: {c.analysis.fairnessScore}/100)
-                                        </option>
-                                    ))
-                                }
-                            </select>
-                        </div>
-                        <div className="card" style={{ padding: '20px', borderRadius: '0px' }}>
-                            <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '10px', fontFamily: 'var(--font-mono)' }}>
-                                Select Deal B //
-                            </label>
-                            <select
-                                value={dealBId}
-                                onChange={(e) => setDealBId(e.target.value)}
-                                className="form-input"
-                                style={{ width: '100%' }}
-                            >
-                                <option value="">-- Choose second audited contract --</option>
-                                {contract
-                                    .filter(c => c._id !== dealAId)
-                                    .map(c => (
-                                        <option key={c._id} value={c._id}>
-                                            {c.fileName} (Score: {c.analysis.fairnessScore}/100)
-                                        </option>
-                                    ))
-                                }
-                            </select>
+                    {/* Dropdowns (Unified Card Layout) */}
+                    <div className="card" style={{ padding: '20px', borderRadius: '0px', marginBottom: '32px' }}>
+                        {uploadError && (
+                            <div className="badge badge-error" style={{ marginBottom: '16px', padding: '12px 16px', display: 'flex', gap: '8px', alignItems: 'center', fontSize: '13px' }}>
+                                <ShieldAlert size={16} />
+                                <span>{uploadError}</span>
+                            </div>
+                        )}
+                        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? '16px' : '24px' }}>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '10px', fontFamily: 'var(--font-mono)' }}>
+                                    Select Deal A //
+                                </label>
+                                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                    <select
+                                        value={dealAId}
+                                        onChange={(e) => setDealAId(e.target.value)}
+                                        className="form-input"
+                                        style={{ flex: 1, minWidth: '0' }}
+                                    >
+                                        <option value="">-- Choose first audited contract --</option>
+                                        {contract
+                                            .filter(c => c._id !== dealBId)
+                                            .map(c => (
+                                                <option key={c._id} value={c._id}>
+                                                    {c.fileName} (Score: {c.analysis.fairnessScore}/100)
+                                                </option>
+                                            ))
+                                        }
+                                    </select>
+                                    <label className="btn" style={{ 
+                                        padding: '10px 14px', 
+                                        height: '42px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: uploadingA ? 'not-allowed' : 'pointer',
+                                        backgroundColor: 'rgba(0, 242, 254, 0.05)',
+                                        borderColor: 'var(--border)',
+                                        flexShrink: 0
+                                    }} title="Upload and analyze new PDF directly">
+                                        {uploadingA ? (
+                                            <div className="spinner" style={{ width: '14px', height: '14px', borderWidth: '2px' }}></div>
+                                        ) : (
+                                            <Sparkles size={16} style={{ color: 'var(--primary)' }} />
+                                        )}
+                                        <input 
+                                            type="file" 
+                                            accept="application/pdf" 
+                                            onChange={(e) => handleUploadDirect(e, 'A')} 
+                                            style={{ display: 'none' }} 
+                                            disabled={uploadingA} 
+                                        />
+                                    </label>
+                                </div>
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '10px', fontFamily: 'var(--font-mono)' }}>
+                                    Select Deal B //
+                                </label>
+                                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                    <select
+                                        value={dealBId}
+                                        onChange={(e) => setDealBId(e.target.value)}
+                                        className="form-input"
+                                        style={{ flex: 1, minWidth: '0' }}
+                                    >
+                                        <option value="">-- Choose second audited contract --</option>
+                                        {contract
+                                            .filter(c => c._id !== dealAId)
+                                            .map(c => (
+                                                <option key={c._id} value={c._id}>
+                                                    {c.fileName} (Score: {c.analysis.fairnessScore}/100)
+                                                </option>
+                                            ))
+                                        }
+                                    </select>
+                                    <label className="btn" style={{ 
+                                        padding: '10px 14px', 
+                                        height: '42px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: uploadingB ? 'not-allowed' : 'pointer',
+                                        backgroundColor: 'rgba(0, 242, 254, 0.05)',
+                                        borderColor: 'var(--border)',
+                                        flexShrink: 0
+                                    }} title="Upload and analyze new PDF directly">
+                                        {uploadingB ? (
+                                            <div className="spinner" style={{ width: '14px', height: '14px', borderWidth: '2px' }}></div>
+                                        ) : (
+                                            <Sparkles size={16} style={{ color: 'var(--primary)' }} />
+                                        )}
+                                        <input 
+                                            type="file" 
+                                            accept="application/pdf" 
+                                            onChange={(e) => handleUploadDirect(e, 'B')} 
+                                            style={{ display: 'none' }} 
+                                            disabled={uploadingB} 
+                                        />
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     {/* Deal Cards Comparison */}
@@ -183,7 +306,35 @@ const OfferComparision = () => {
                                     </div>
                                 </div>
                             )}
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? '16px' : '24px', position: 'relative' }}>
+                                {/* Floating VS Divider Badge */}
+                                {!isMobile ? (
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: '50%',
+                                        left: '50%',
+                                        transform: 'translate(-50%, -50%)',
+                                        zIndex: 10,
+                                        backgroundColor: '#0a0a0c',
+                                        border: '1px solid var(--border)',
+                                        borderRadius: '50%',
+                                        width: '42px',
+                                        height: '42px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        fontFamily: 'var(--font-mono)',
+                                        fontWeight: 800,
+                                        fontSize: '12px',
+                                        color: 'var(--primary)',
+                                        boxShadow: '0 0 15px rgba(0, 242, 254, 0.2)'
+                                    }}>
+                                        VS
+                                    </div>
+                                ) : (
+                                    null
+                                )}
+
                                 {/* Deal A Card */}
                                 <div className="card" style={{ padding: '24px', borderRadius: '0px', position: 'relative' }}>
                                     {recommendation?.winner === 'Deal A' && (
@@ -254,6 +405,24 @@ const OfferComparision = () => {
                                         )}
                                     </div>
                                 </div>
+
+                                {isMobile && (
+                                    <div style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        margin: '8px 0',
+                                        fontFamily: 'var(--font-mono)',
+                                        fontWeight: 800,
+                                        fontSize: '11px',
+                                        color: 'var(--text-dim)'
+                                    }}>
+                                        <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--border)', marginRight: '12px' }}></div>
+                                        <span>VS SYSTEM COMPARISON</span>
+                                        <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--border)', marginLeft: '12px' }}></div>
+                                    </div>
+                                )}
+
                                 {/* Deal B Card */}
                                 <div className="card" style={{ padding: '24px', borderRadius: '0px', position: 'relative' }}>
                                     {recommendation?.winner === 'Deal B' && (

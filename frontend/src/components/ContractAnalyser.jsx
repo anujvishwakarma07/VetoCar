@@ -8,7 +8,7 @@ const ContractAnalyzer = ({ contractResult, setContractResult, setChatMessages }
   const [dragging, setDragging] = useState(false);
   const fileInputRef = useRef(null);
 
-  const API_URL = 'http://localhost:8080/api';
+  const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:8080/api';
 
   // Score styling helpers
   const getScoreClass = (score) => {

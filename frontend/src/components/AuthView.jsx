@@ -44,7 +44,8 @@ const AuthView = ({ setIsAuthenticated, setUser }) => {
 
     try {
       const endpoint = isRegister ? '/api/auth/register' : '/api/auth/login';
-      const response = await fetch(`http://localhost:8080${endpoint}`, {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+      const response = await fetch(`${API_URL}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

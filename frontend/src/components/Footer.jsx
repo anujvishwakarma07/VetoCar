@@ -1,14 +1,26 @@
 import React from 'react';
-import { Sparkles, ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
+import darkModeLogo from '../assets/darkModeTextual.png';
+import lightModeLogo from '../assets/LightModeTextual.png';
+import darkModeSymbol from '../assets/darkModeSymbolic.png';
+import lightModeSymbol from '../assets/lightModeSybolic.png';
 
-const Footer = () => {
+const Footer = ({ theme }) => {
   return (
     <footer className="app-footer">
       <div className="footer-top">
         <div className="footer-brand-section">
-          <div className="footer-brand">
-            <Sparkles size={16} className="footer-brand-icon" />
-            <span className="footer-brand-title">VETOCAR</span>
+          <div className="footer-brand" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <img 
+              src={theme === 'dark' ? darkModeSymbol : lightModeSymbol} 
+              alt="VetoCar Mark" 
+              style={{ height: '22px', objectFit: 'contain' }} 
+            />
+            <img 
+              src={theme === 'dark' ? darkModeLogo : lightModeLogo} 
+              alt="VetoCar Logo" 
+              style={{ height: '14px', objectFit: 'contain' }} 
+            />
             <span className="footer-brand-version">// SYS_VER.1.0.4</span>
           </div>
           <p className="footer-disclaimer">
