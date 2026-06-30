@@ -10,6 +10,7 @@ import AuthView from './components/AuthView.jsx';
 import OfferComparision from './components/OfferComparision.jsx';
 import SettingsView from './components/SettingsView.jsx';
 import BuyCredits from './components/BuyCredits.jsx';
+import PublicLanding from './components/PublicLanding.jsx';
 import { Agentation } from 'agentation';
 
 import darkModeLogo from './assets/darkModeTextual.png';
@@ -74,6 +75,21 @@ function App() {
       setActiveTab('dashboard');
     }
   }, [isAuthenticated]);
+
+  // Show public landing page for unauthenticated users (no sidebar, no protected features)
+  if (!isAuthenticated) {
+    return (
+      <>
+        <Agentation />
+        <PublicLanding
+          setIsAuthenticated={setIsAuthenticated}
+          setUser={setUser}
+          theme={theme}
+          toggleTheme={toggleTheme}
+        />
+      </>
+    );
+  }
 
   return (
     <>
