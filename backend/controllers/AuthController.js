@@ -114,6 +114,7 @@ export const getUserProfile = async (req, res) => {
                 id: user._id,
                 username: user.username,
                 email: user.email,
+                credits: user.credits,
                 createdAt: user.createdAt
             },
             stats: {
