@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Sparkles, Sun, Moon } from 'lucide-react';
+import { Sparkles, Sun, Moon, Menu, X } from 'lucide-react';
 import Sidebar from './components/Sidebar.jsx';
 import DashboardView from './components/DashboardView.jsx';
 import ContractAnalyser from './components/ContractAnalyser.jsx';
@@ -20,6 +20,7 @@ import lightModeSymbol from './assets/lightModeSybolic.png';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Theme state persisted in localStorage
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
@@ -95,7 +96,33 @@ function App() {
     <>
       <Agentation />
       <div className="dashboard-layout">
+        {/* Backdrop overlay for mobile drawer */}
+        {isSidebarOpen && (
+          <div 
+            className="sidebar-backdrop"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
+
         <div className="mobile-header">
+          <button
+            onClick={() => setIsSidebarOpen(prev => !prev)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--text-main)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '8px',
+              marginRight: '8px'
+            }}
+            aria-label="Toggle navigation menu"
+          >
+            {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
             <img 
               src={theme === 'dark' ? darkModeSymbol : lightModeSymbol} 
@@ -135,6 +162,8 @@ function App() {
           theme={theme}
           toggleTheme={toggleTheme}
           isAuthenticated={isAuthenticated}
+          isOpen={isSidebarOpen}
+          setIsOpen={setIsSidebarOpen}
         />
 
         <div className="main-content">

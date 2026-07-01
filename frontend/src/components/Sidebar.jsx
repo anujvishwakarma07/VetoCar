@@ -17,15 +17,23 @@ import lightModeLogo from '../assets/LightModeTextual.png';
 import darkModeSymbol from '../assets/darkModeSymbolic.png';
 import lightModeSymbol from '../assets/lightModeSybolic.png';
 
-const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, theme, toggleTheme, isAuthenticated }) => {
+const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, theme, toggleTheme, isAuthenticated, isOpen, setIsOpen }) => {
   const handleSignOut = () => {
     if (setIsAuthenticated) setIsAuthenticated(false);
     if (setUser) setUser(null);
     localStorage.removeItem('token');
+    if (setIsOpen) setIsOpen(false);
+  };
+
+  const handleItemClick = (tab) => {
+    setActiveTab(tab);
+    if (setIsOpen) {
+      setIsOpen(false);
+    }
   };
 
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${isOpen ? 'open' : ''}`}>
       {/* Brand Logo */}
       <div className="sidebar-logo" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
         <img 
@@ -44,7 +52,7 @@ const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, theme, 
       <div className="sidebar-menu">
         <div
           className={`sidebar-item ${activeTab === 'dashboard' ? 'active' : ''}`}
-          onClick={() => setActiveTab('dashboard')}
+          onClick={() => handleItemClick('dashboard')}
         >
           <LayoutDashboard size={20} />
           <span>Dashboard</span>
@@ -52,7 +60,7 @@ const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, theme, 
 
         <div
           className={`sidebar-item ${activeTab === 'analyzer' ? 'active' : ''}`}
-          onClick={() => setActiveTab('analyzer')}
+          onClick={() => handleItemClick('analyzer')}
         >
           <FileSearch size={20} />
           <span>Contract Analyzer</span>
@@ -60,7 +68,7 @@ const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, theme, 
 
         <div
           className={`sidebar-item ${activeTab === 'vin' ? 'active' : ''}`}
-          onClick={() => setActiveTab('vin')}
+          onClick={() => handleItemClick('vin')}
         >
           <Car size={20} />
           <span>VIN Lookup</span>
@@ -68,7 +76,7 @@ const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, theme, 
 
         <div
           className={`sidebar-item ${activeTab === 'coach' ? 'active' : ''}`}
-          onClick={() => setActiveTab('coach')}
+          onClick={() => handleItemClick('coach')}
         >
           <MessageSquare size={20} />
           <span>Negotiation Coach</span>
@@ -76,7 +84,7 @@ const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, theme, 
 
         <div
           className={`sidebar-item ${activeTab === 'compare' ? 'active' : ''}`}
-          onClick={() => setActiveTab('compare')}
+          onClick={() => handleItemClick('compare')}
         >
           <GitCompare size={20} />
           <span>Compare Deals</span>
@@ -84,7 +92,7 @@ const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, theme, 
 
         <div
           className={`sidebar-item ${activeTab === 'settings' ? 'active' : ''}`}
-          onClick={() => setActiveTab('settings')}
+          onClick={() => handleItemClick('settings')}
         >
           <Settings size={20} />
           <span>Settings</span>
@@ -92,7 +100,7 @@ const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, theme, 
 
         <div
           className={`sidebar-item ${activeTab === 'buy_credits' ? 'active' : ''}`}
-          onClick={() => setActiveTab('buy_credits')}
+          onClick={() => handleItemClick('buy_credits')}
         >
           <Coins size={20} />
           <span>Buy Credits</span>
