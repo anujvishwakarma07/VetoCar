@@ -168,7 +168,12 @@ function App() {
 
         <div className="main-content">
           {activeTab === 'dashboard' && (
-            <DashboardView setActiveTab={setActiveTab} />
+            <DashboardView 
+              setActiveTab={setActiveTab} 
+              user={user} 
+              theme={theme} 
+              setContractResult={setContractResult} 
+            />
           )}
 
           {activeTab === 'analyzer' && (
