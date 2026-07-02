@@ -218,13 +218,13 @@ const BuyCredits = ({ onPaymentSuccess }) => {
                 top: '-12px',
                 right: '20px',
                 background: 'var(--primary)',
-                color: '#000',
+                color: 'var(--bg-main)',
                 fontSize: '10px',
                 fontWeight: 800,
                 fontFamily: 'var(--font-mono)',
                 textTransform: 'uppercase',
                 padding: '4px 8px',
-                borderRadius: '4px'
+                borderRadius: '0px'
               }}>
                 Popular Choice
               </span>

@@ -236,7 +236,7 @@ const isQuotaError = (msg = '') =>
   msg.includes('429') || msg.toLowerCase().includes('quota') ||
   msg.toLowerCase().includes('rate limit') || msg.toLowerCase().includes('too many');
 
-const VinLookup = () => {
+const VinLookup = ({ userCredits, setCredits, setActiveTab }) => {
   const [activeMode, setActiveMode] = useState('vin');
 
   const [vinInput, setVinInput] = useState('');
@@ -264,14 +264,30 @@ const VinLookup = () => {
   const handleDecodeVin = async (e) => {
     e.preventDefault();
     if (!vinInput.trim()) return;
+
+    if (userCredits !== undefined && userCredits < 5) {
+      alert(`Insufficient credits. VIN decode requires 5 credits, but you only have ${userCredits}. Redirecting to purchase credits.`);
+      setActiveTab('buy_credits');
+      return;
+    }
+
     setDecoding(true); setVinError(''); setVinResult(null); setVinQuota(false);
     try {
       const res = await fetch(`${API_URL}/vin/decode/${vinInput.trim()}`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Unable to decode VIN.');
+      if (!res.ok) {
+        if (res.status === 402 || data.code === 'INSUFFICIENT_CREDITS') {
+          if (setCredits) setCredits(0);
+          alert("Insufficient credits. Redirecting to top-up packages.");
+          setActiveTab('buy_credits');
+          return;
+        }
+        throw new Error(data.error || 'Unable to decode VIN.');
+      }
       setVinResult(data.carInfo);
+      if (setCredits) setCredits(prev => Math.max(0, prev - 5));
     } catch (err) {
       if (isQuotaError(err.message)) setVinQuota(true);
       else setVinError(err.message || 'Failed to decode VIN.');
@@ -281,6 +297,13 @@ const VinLookup = () => {
   const handleDecodePlate = async (e) => {
     e.preventDefault();
     if (!plateInput.trim() || !stateInput) return;
+
+    if (userCredits !== undefined && userCredits < 8) {
+      alert(`Insufficient credits. License plate lookup requires 8 credits, but you only have ${userCredits}. Redirecting to purchase credits.`);
+      setActiveTab('buy_credits');
+      return;
+    }
+
     setPlateLooking(true); setPlateError(''); setPlateResult(null); setPlateVin(''); setPlateQuota(false);
     try {
       const res = await fetch(
@@ -288,9 +311,18 @@ const VinLookup = () => {
         { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } }
       );
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'License plate lookup failed.');
+      if (!res.ok) {
+        if (res.status === 402 || data.code === 'INSUFFICIENT_CREDITS') {
+          if (setCredits) setCredits(0);
+          alert("Insufficient credits. Redirecting to top-up packages.");
+          setActiveTab('buy_credits');
+          return;
+        }
+        throw new Error(data.error || 'License plate lookup failed.');
+      }
       setPlateResult(data.carInfo);
       setPlateVin(data.vin || '');
+      if (setCredits) setCredits(prev => Math.max(0, prev - 8));
     } catch (err) {
       if (isQuotaError(err.message)) setPlateQuota(true);
       else setPlateError(err.message || 'Failed to decode license plate.');
@@ -300,6 +332,13 @@ const VinLookup = () => {
   const handleIndianPlate = async (e) => {
     e.preventDefault();
     if (!indianPlate.trim()) return;
+
+    if (userCredits !== undefined && userCredits < 8) {
+      alert(`Insufficient credits. Registration lookup requires 8 credits, but you only have ${userCredits}. Redirecting to purchase credits.`);
+      setActiveTab('buy_credits');
+      return;
+    }
+
     setIndianLoading(true); setIndianError(''); setIndianResult(null); setIndianQuota(false);
     try {
       const res = await fetch(
@@ -307,8 +346,17 @@ const VinLookup = () => {
         { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } }
       );
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Indian RC lookup failed.');
+      if (!res.ok) {
+        if (res.status === 402 || data.code === 'INSUFFICIENT_CREDITS') {
+          if (setCredits) setCredits(0);
+          alert("Insufficient credits. Redirecting to top-up packages.");
+          setActiveTab('buy_credits');
+          return;
+        }
+        throw new Error(data.error || 'Indian RC lookup failed.');
+      }
       setIndianResult(data.vehicleInfo);
+      if (setCredits) setCredits(prev => Math.max(0, prev - 8));
     } catch (err) {
       if (isQuotaError(err.message)) setIndianQuota(true);
       else setIndianError(err.message || 'Failed to decode registration number.');
