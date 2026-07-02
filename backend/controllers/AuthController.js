@@ -115,10 +115,12 @@ export const getUserProfile = async (req, res) => {
                 username: user.username,
                 email: user.email,
                 credits: user.credits || 0,
+                lookupsCount: user.lookupsCount || 0,
                 createdAt: user.createdAt
             },
             stats: {
-                contractAudited: contractsCount
+                contractAudited: contractsCount,
+                vinLookups: user.lookupsCount || 0
             }
         });
     } catch (error) {
@@ -172,4 +174,47 @@ export const changePassword = async (req, res) => {
             error: 'Server error during password update'
         });
     };
-}
+};
+
+export const updateProfile = async (req, res) => {
+    const { username, email } = req.body;
+    try {
+        if (!username || !email) {
+            return res.status(400).json({ error: 'Username and email are required' });
+        }
+
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Check if username/email is taken by someone else
+        const taken = await User.findOne({ 
+            _id: { $ne: req.user.id }, 
+            $or: [{ username }, { email }] 
+        });
+        if (taken) {
+            return res.status(400).json({ 
+                error: taken.username === username ? 'Username is already taken' : 'Email is already registered' 
+            });
+        }
+
+        user.username = username;
+        user.email = email;
+        await user.save();
+
+        return res.status(200).json({
+            message: 'Profile updated successfully',
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                credits: user.credits || 0,
+                createdAt: user.createdAt
+            }
+        });
+    } catch (error) {
+        console.error('Error in updateProfile controller:', error);
+        return res.status(500).json({ error: 'Server error during profile update' });
+    }
+};
