@@ -10,7 +10,7 @@ const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/
 const COLORS = ['#00ff88', '#00b4d8', '#f77f00', '#e63946', '#a855f7', '#fbbf24'];
 const DEVICE_COLORS = { desktop: '#00ff88', mobile: '#00b4d8', tablet: '#f77f00' };
 
-// ── SVG Line Chart ────────────────────────────────────────────────────────────
+// SVG Line Chart
 const LineChart = ({ data, title, color = '#00ff88', valueKey = 'count', labelKey = '_id' }) => {
   if (!data || data.length < 2) return (
     <div>
@@ -61,7 +61,7 @@ const LineChart = ({ data, title, color = '#00ff88', valueKey = 'count', labelKe
   );
 };
 
-// ── Donut Chart ───────────────────────────────────────────────────────────────
+// Donut Chart
 const DonutChart = ({ data, title }) => {
   if (!data || data.length === 0) return (
     <div><div className="admin-chart-title">{title}</div>
@@ -108,7 +108,7 @@ const DonutChart = ({ data, title }) => {
   );
 };
 
-// ── Bar Chart ─────────────────────────────────────────────────────────────────
+// Bar Chart
 const BarChart = ({ data, title }) => {
   if (!data || data.length === 0) return (
     <div><div className="admin-chart-title">{title}</div>
@@ -133,7 +133,7 @@ const BarChart = ({ data, title }) => {
   );
 };
 
-// ── Metric Card ───────────────────────────────────────────────────────────────
+// Metric Card
 const MetricCard = ({ icon: Icon, label, value, sub, color = '#00ff88', loading }) => (
   <div className="admin-metric-card">
     <div className="admin-metric-top">
@@ -149,7 +149,7 @@ const MetricCard = ({ icon: Icon, label, value, sub, color = '#00ff88', loading 
   </div>
 );
 
-// ── Main Component ─────────────────────────────────────────────────────────────
+// Main Component
 const AdminPanel = ({ adminToken }) => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -405,7 +405,7 @@ const AdminPanel = ({ adminToken }) => {
         ))}
       </div>
 
-      {/* ── OVERVIEW SECTION ─────────────────────────────────────── */}
+      {/* Overview Section */}
       {activeSection === 'overview' && (
         <>
           <div className="admin-metrics-grid">
@@ -447,7 +447,7 @@ const AdminPanel = ({ adminToken }) => {
         </>
       )}
 
-      {/* ── USERS SECTION ────────────────────────────────────────── */}
+      {/* Users Section */}
       {activeSection === 'users' && (
         <>
           <div className="admin-metrics-grid">
@@ -503,7 +503,7 @@ const AdminPanel = ({ adminToken }) => {
         </>
       )}
 
-      {/* ── CONTRACTS SECTION ────────────────────────────────────── */}
+      {/* Contracts Section */}
       {activeSection === 'contracts' && (
         <>
           <div className="admin-metrics-grid">
@@ -561,7 +561,7 @@ const AdminPanel = ({ adminToken }) => {
         </>
       )}
 
-      {/* ── TRAFFIC SECTION ──────────────────────────────────────── */}
+      {/* Traffic Section */}
       {activeSection === 'traffic' && (
         <>
           <div className="admin-metrics-grid">
@@ -679,7 +679,7 @@ const AdminPanel = ({ adminToken }) => {
         </>
       )}
 
-      {/* ── FEEDBACK SECTION ──────────────────────────────────────── */}
+      {/* Feedback Section */}
       {activeSection === 'feedback' && (
         <>
           {/* Feedback statistics summary */}

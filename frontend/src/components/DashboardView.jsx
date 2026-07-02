@@ -122,7 +122,7 @@ const DashboardView = ({ setActiveTab, user, setContractResult, setChatMessages 
 
   return (
     <div className="dash-container">
-      {/* 1. High Tech Welcome Banner */}
+      {/* Welcome Banner */}
       <div className="dash-welcome-banner">
         <div>
           <div className="dash-tag">
@@ -149,7 +149,7 @@ const DashboardView = ({ setActiveTab, user, setContractResult, setChatMessages 
         </div>
       ) : (
         <>
-          {/* 2. Key Metrics Grid */}
+          {/* Key Metrics Grid */}
           <div className="dash-metrics-grid">
             <div className="dash-metric-card">
               <div className="dash-metric-header">
@@ -206,9 +206,9 @@ const DashboardView = ({ setActiveTab, user, setContractResult, setChatMessages 
             </div>
           </div>
 
-          {/* 3. Main Dashboard Body: Recent Audits & Terminal Monitor */}
+          {/* Recent Audits & Terminal Monitor */}
           <div className="dash-main-split">
-            {/* Left: Recent Audits Table */}
+            {/* Recent Audits Table */}
             <div className="dash-panel-card">
               <div className="dash-panel-header">
                 <h3 className="dash-panel-title">RECENT CONTRACT AUDITS</h3>
@@ -280,7 +280,7 @@ const DashboardView = ({ setActiveTab, user, setContractResult, setChatMessages 
               </div>
             </div>
 
-            {/* Right: Live Monitor Terminal */}
+            {/* Live Monitor Terminal */}
             <div className="dash-panel-card dash-terminal-panel">
               <div className="dash-panel-header">
                 <h3 className="dash-panel-title">SYSTEM MONITOR FEED</h3>
@@ -321,7 +321,7 @@ const DashboardView = ({ setActiveTab, user, setContractResult, setChatMessages 
         </>
       )}
 
-      {/* 4. Capabilities Bento Grid */}
+      {/* Capabilities Grid */}
       <div className="dash-capabilities-header">
         <h3 className="dash-capabilities-title">CAPABILITY DECKS</h3>
       </div>

@@ -521,7 +521,7 @@ const ContractAnalyzer = ({ contractResult, setContractResult, setChatMessages, 
         </div>
       )}
 
-      {/* ── Slide-Over PDF Report Preview Modal ── */}
+      {/* PDF Report Preview Modal */}
       {showPreviewModal && contractResult && (
         <div className="pdf-preview-backdrop">
           <div className="pdf-preview-modal">

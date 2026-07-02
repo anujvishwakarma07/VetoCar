@@ -9,7 +9,7 @@ export const getTrafficStats = async (req, res) => {
         const last7d  = new Date(now - 7  * 24 * 60 * 60 * 1000);
         const last30d = new Date(now - 30 * 24 * 60 * 60 * 1000);
 
-        // ── Run all queries in parallel ──────────────────────────────────────
+        // Run queries in parallel
         const [
             // Traffic
             totalRequests,
@@ -46,7 +46,7 @@ export const getTrafficStats = async (req, res) => {
             totalLookupsAllUsers,
         ] = await Promise.all([
 
-            // ── Traffic queries ──────────────────────────────────
+            // Traffic queries
             Traffic.countDocuments(),
             Traffic.countDocuments({ timestamp: { $gte: last24h } }),
             Traffic.countDocuments({ timestamp: { $gte: last7d  } }),
@@ -147,7 +147,7 @@ export const getTrafficStats = async (req, res) => {
                 { $sort: { count: -1 } }
             ]),
 
-            // ── User queries ─────────────────────────────────────
+            // User queries
             User.countDocuments(),
             User.countDocuments({ createdAt: { $gte: last7d  } }),
             User.countDocuments({ createdAt: { $gte: last30d } }),
@@ -159,7 +159,7 @@ export const getTrafficStats = async (req, res) => {
                 .sort({ createdAt: -1 })
                 .limit(100),
 
-            // ── Contract queries ─────────────────────────────────
+            // Contract queries
             Contract.countDocuments(),
             Contract.countDocuments({ uploadedAt: { $gte: last7d  } }),
             Contract.countDocuments({ uploadedAt: { $gte: last30d } }),
@@ -170,7 +170,7 @@ export const getTrafficStats = async (req, res) => {
                 .select('fileName fileSize uploadedAt userId analysis')
                 .populate('userId', 'username email'),
 
-            // ── Credit / activity aggregations ───────────────────
+            // Credit / activity aggregations
             User.aggregate([
                 { $group: { _id: null, total: { $sum: '$credits' } } }
             ]).then(r => r[0]?.total || 0),

@@ -104,14 +104,14 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
       <div className="landing-glow-orb-2" style={{ top: '35%', right: '-150px' }} />
       <div className="landing-glow-orb" style={{ bottom: '150px', left: '-200px' }} />
 
-      {/* ── Slide-Over Authentication Drawer Backdrop ── */}
+      {/* Authentication Drawer Backdrop */}
       {showAuth && (
         <div
           className="auth-drawer-backdrop"
           onClick={() => setShowAuth(false)}
           style={{ display: 'flex', alignItems: 'center' }}
         >
-          {/* Detailed Diagnostic Car HUD on the left */}
+          {/* Car HUD Graphic */}
           <div className="auth-backdrop-hud">
             <div style={{ textAlign: 'center', marginBottom: '24px' }}>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', background: 'rgba(0, 245, 212, 0.1)', border: '1px solid rgba(0, 245, 212, 0.2)', marginBottom: '16px' }}>
@@ -125,7 +125,7 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
               </h3>
             </div>
 
-            {/* Detailed Vector Car Blueprint SVG */}
+            {/* Vector Car Blueprint SVG */}
             <div style={{ position: 'relative', width: '100%', maxWidth: '580px', height: '240px' }}>
               <svg viewBox="0 0 800 200" fill="none" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%', filter: 'drop-shadow(0 0 8px rgba(0, 245, 212, 0.3))' }}>
                 {/* Sports car blueprint path */}
@@ -138,13 +138,13 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
                 <path d="M 780 125 L 755 128" stroke="var(--accent)" strokeWidth="1" />
                 <path d="M 400 85 C 440 85, 490 85, 520 100 L 450 120 Z" fill="none" stroke="var(--accent)" strokeWidth="1" opacity="0.5" />
 
-                {/* HUD detailing lines pointing to components */}
+                {/* HUD components styling */}
                 <path d="M 120 120 L 70 60 L 20 60" stroke="var(--accent)" strokeWidth="0.75" strokeDasharray="2 2" />
                 <path d="M 450 90 L 480 40 L 530 40" stroke="var(--accent)" strokeWidth="0.75" strokeDasharray="2 2" />
                 <path d="M 720 135 L 750 90 L 800 90" stroke="var(--accent)" strokeWidth="0.75" strokeDasharray="2 2" />
               </svg>
 
-              {/* Text labels floating on HUD lines */}
+              {/* Text labels */}
               <div style={{ position: 'absolute', left: '10px', top: '35px', fontFamily: 'var(--font-mono)', fontSize: '9px', textAlign: 'left' }}>
                 <span style={{ color: 'var(--accent)', fontWeight: 800 }}>[01 // ACQ FEE DETECTOR]</span><br />
                 <span style={{ color: 'var(--text-muted)' }}>MAX CAP: $695 baseline</span>
@@ -173,7 +173,7 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
         </div>
       )}
 
-      {/* ── Slide-Over Authentication Drawer ── */}
+      {/* Authentication Drawer */}
       <div className={`auth-drawer ${showAuth ? 'open' : ''}`}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
           <span style={{ fontSize: '10px', fontWeight: 800, fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'var(--text-muted)' }}>
@@ -307,7 +307,7 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
         </div>
       </div>
 
-      {/* ── Sticky Glassmorphic Header ── */}
+      {/* Landing page header */}
       <div className={`landing-page-content ${showAuth ? 'blurred' : ''}`} style={{ paddingTop: '72px' }}>
         <header className="landing-header glass-panel">
         <div 
@@ -344,7 +344,7 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
         </div>
       </header>
 
-      {/* ── FIRST PAGE VIEWPORT FOLD ── */}
+      {/* Hero Section */}
       <div className="hero-viewport-fold">
         <div className="hero-centered" style={{ margin: 0 }}>
           <div className="hero-tag" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
@@ -382,7 +382,7 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
             </button>
           </div>
 
-          {/* High-Tech Automotive Diagnostic Ticker */}
+          {/* Metrics Ticker */}
           <div style={{
             display: 'flex',
             justifyContent: 'center',
@@ -411,7 +411,7 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
             </div>
           </div>
 
-          {/* Sleek CSS Sports Car Silhouette Outline */}
+          {/* Sports Car Silhouette Outline */}
           <svg viewBox="0 0 800 200" fill="none" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: theme === 'dark' ? 0.70 : 0.85, width: '100%', maxWidth: '480px', height: 'auto', display: 'block', margin: '32px auto 0 auto' }}>
             <path d="M 50 150 L 150 150 C 180 150, 190 110, 230 110 L 300 110 C 330 110, 360 80, 420 80 L 520 80 C 580 80, 620 110, 680 120 L 730 130 C 760 135, 780 150, 790 150 L 800 150 M 100 150 A 35 35 0 0 1 170 150 M 630 150 A 35 35 0 0 1 700 150" />
             <circle cx="135" cy="150" r="28" stroke="var(--accent)" strokeWidth="1" strokeDasharray="4 2" />
@@ -425,7 +425,7 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
         </div>
       </div>
 
-      {/* ── LOWER SCROLLABLE SECTIONS ── */}
+      {/* Core Features & Capabilities */}
       <div className="landing-sections-wrapper">
 
         {/* Bento Grid: Core Capabilities */}
@@ -450,7 +450,7 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
           </div>
 
           <div className="bento-grid">
-            {/* Bento Card 1: Auditor (Span 2) */}
+            {/* Lease Auditor */}
             <div className="bento-item bento-span-2 hover-glow" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <div>
                 <div style={{ width: '42px', height: '42px', background: 'rgba(0, 245, 212, 0.1)', border: '1px solid rgba(0, 245, 212, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', marginBottom: '24px' }}>
@@ -473,7 +473,7 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
               </div>
             </div>
 
-            {/* Bento Card 2: NHTSA Verification (Span 1) */}
+            {/* NHTSA Verification */}
             <div className="bento-item hover-glow" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <div>
                 <div style={{ width: '42px', height: '42px', background: 'rgba(0, 245, 212, 0.1)', border: '1px solid rgba(0, 245, 212, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', marginBottom: '24px' }}>
@@ -490,7 +490,7 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
               </div>
             </div>
 
-            {/* Bento Card 3: Negotiation Coach (Span 1) */}
+            {/* Negotiation Coach */}
             <div className="bento-item hover-glow" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <div>
                 <div style={{ width: '42px', height: '42px', background: 'rgba(0, 245, 212, 0.1)', border: '1px solid rgba(0, 245, 212, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', marginBottom: '24px' }}>
@@ -506,7 +506,7 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
               </div>
             </div>
 
-            {/* Bento Card 4: Side-by-Side Compare (Span 2) */}
+            {/* Compare Tool */}
             <div className="bento-item bento-span-2 hover-glow" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <div>
                 <div style={{ width: '42px', height: '42px', background: 'rgba(0, 245, 212, 0.1)', border: '1px solid rgba(0, 245, 212, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', marginBottom: '24px' }}>
@@ -531,7 +531,7 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
           </div>
         </div>
 
-        {/* Dynamic Simulator & Audit Calculator */}
+        {/* Simulator Section */}
         <div id="simulator-section" className="landing-section">
           <div style={{ marginBottom: '40px' }}>
             <div style={{
@@ -553,9 +553,9 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
           </div>
 
           <div className="simulator-grid">
-            {/* Sliders Control Card */}
+            {/* Controls Card */}
             <div className="card" style={{ padding: '32px', background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: 0, margin: 0 }}>
-              {/* Vehicle Preset Selector */}
+              {/* Presets */}
               <div style={{ display: 'flex', gap: '12px', marginBottom: '36px' }}>
                 {Object.keys(vehiclePresets).map((key) => (
                   <button
@@ -641,7 +641,7 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
               </div>
             </div>
 
-            {/* Calculations Dashboard Card */}
+            {/* Calculations Card */}
             <div className="glass-panel" style={{ padding: '40px', border: '1px solid var(--border)', position: 'relative' }}>
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: 'linear-gradient(to right, var(--accent), var(--primary))' }} />
 
@@ -674,7 +674,7 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
                   </span>
                 </div>
 
-                {/* Glowing markup scale slider */}
+                {/* Markup scale slider */}
                 <div style={{ width: '100%', height: '6px', background: 'var(--border)', position: 'relative', marginTop: '4px', overflow: 'hidden' }}>
                   <div style={{
                     height: '100%',

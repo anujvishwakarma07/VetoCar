@@ -177,52 +177,38 @@ const SettingsView = () => {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px', color: 'var(--text-main)' }}>
       {profile && (
         <>
-          <div className="dash-welcome-banner" style={{ marginBottom: '32px', border: '1px solid var(--border)', padding: '24px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-              <div style={{
-                width: '72px',
-                height: '72px',
-                border: '1px solid var(--accent)',
-                background: 'rgba(0, 245, 212, 0.04)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '28px',
-                fontWeight: 900,
-                color: 'var(--accent)',
-                fontFamily: 'var(--font-mono)'
-              }}>
+          <div className="settings-welcome-banner">
+            <div className="settings-user-info">
+              <div className="settings-avatar">
                 {avatarLetter}
               </div>
-              <div>
+              <div className="settings-user-text">
                 <div className="dash-tag" style={{ display: 'inline-flex', marginBottom: '6px' }}>
                   <span className="dash-pulse-dot" />
                   <span>ACCESS LEVEL // PRO AUDITOR</span>
                 </div>
-                <h2 className="dash-header" style={{ fontSize: '24px', margin: 0, letterSpacing: '-0.02em' }}>
+                <h2 className="dash-header">
                   {profile.user.username.toUpperCase()}
                 </h2>
-                <p className="dash-subtitle" style={{ fontSize: '13px', marginTop: '4px' }}>
+                <p className="dash-subtitle">
                   {profile.user.email}
                 </p>
               </div>
             </div>
             
-            <div className="dash-time-panel" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <div style={{ display: 'flex', gap: '24px', justifyContent: 'flex-end' }}>
-                <div style={{ textAlign: 'right' }}>
-                  <div className="dash-time-label">CREDIT BALANCE //</div>
-                  <div style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)', fontWeight: 800, fontSize: '18px', marginTop: '4px' }}>{profile.user.credits ?? 0} CREDITS</div>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                  <div className="dash-time-label">AUDITS PERFORMED //</div>
-                  <div style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-main)', fontWeight: 800, fontSize: '18px', marginTop: '4px' }}>{profile.stats.contractAudited ?? 0} DOCUMENTS</div>
-                </div>
+            <div className="settings-stats-panel">
+              <div className="settings-stat-item">
+                <div className="settings-stat-label">CREDIT BALANCE //</div>
+                <div className="settings-stat-value">{profile.user.credits ?? 0} CREDITS</div>
+              </div>
+              <div className="settings-stat-item">
+                <div className="settings-stat-label">AUDITS PERFORMED //</div>
+                <div className="settings-stat-value">{profile.stats.contractAudited ?? 0} DOCUMENTS</div>
               </div>
             </div>
           </div>
 
-          <div className="dash-metrics-grid" style={{ marginBottom: '32px' }}>
+          <div className="settings-metrics-grid">
             <div className="dash-metric-card" style={{ borderRadius: '0px' }}>
               <div className="dash-metric-header">
                 <span className="dash-metric-title">SYSTEM STATUS</span>
@@ -257,47 +243,16 @@ const SettingsView = () => {
             </div>
           </div>
 
-          <div style={{ 
-            display: 'flex', 
-            borderBottom: '1px solid var(--border)', 
-            marginBottom: '32px',
-            gap: '8px'
-          }}>
+          <div className="settings-tab-container">
             <button
               onClick={() => setActiveSubTab('profile')}
-              style={{
-                background: activeSubTab === 'profile' ? 'var(--bg-hover)' : 'none',
-                border: 'none',
-                borderBottom: activeSubTab === 'profile' ? '2px solid var(--accent)' : '2px solid transparent',
-                color: activeSubTab === 'profile' ? 'var(--text-main)' : 'var(--text-muted)',
-                padding: '12px 20px',
-                fontSize: '11px',
-                fontWeight: 800,
-                cursor: 'pointer',
-                fontFamily: 'var(--font-mono)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                transition: 'var(--transition)'
-              }}
+              className={`settings-tab-btn ${activeSubTab === 'profile' ? 'active' : ''}`}
             >
               [ 01 // PROFILE & DATA ]
             </button>
             <button
               onClick={() => setActiveSubTab('security')}
-              style={{
-                background: activeSubTab === 'security' ? 'var(--bg-hover)' : 'none',
-                border: 'none',
-                borderBottom: activeSubTab === 'security' ? '2px solid var(--accent)' : '2px solid transparent',
-                color: activeSubTab === 'security' ? 'var(--text-main)' : 'var(--text-muted)',
-                padding: '12px 20px',
-                fontSize: '11px',
-                fontWeight: 800,
-                cursor: 'pointer',
-                fontFamily: 'var(--font-mono)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                transition: 'var(--transition)'
-              }}
+              className={`settings-tab-btn ${activeSubTab === 'security' ? 'active' : ''}`}
             >
               [ 02 // SECURITY CONFIG ]
             </button>
@@ -305,7 +260,7 @@ const SettingsView = () => {
 
           {/* Tab 1: Profile & Details */}
           {activeSubTab === 'profile' && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', alignItems: 'start' }}>
+            <div className="settings-grid">
               
               {/* Profile Details Edit Card */}
               <div className="card" style={{ padding: '24px', borderRadius: '0px', background: 'var(--bg-surface)', border: '1px solid var(--border)' }}>

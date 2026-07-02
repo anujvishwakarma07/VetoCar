@@ -1,8 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// -----------------------------------------------------------------
-// --- SECURE LOCAL FALLBACK ENGINES (FOR QUOTA / 429 ERRORS) ---
-// -----------------------------------------------------------------
+// Local fallback engines for API quota limits
 
 /**
  * Returns simulated mock analysis when Gemini API is rate-limited or key is missing.
@@ -105,9 +103,7 @@ Best regards,
 *Try asking about "email templates", "doc fees", "money factor", or "dealer add-ons" to get specific scripts!*`;
 };
 
-// -----------------------------------------------------------------
-// --- LIVE SERVICE METHOD WRAPPERS WITH SEAMLESS FALLBACKS ---
-// -----------------------------------------------------------------
+// Main wrapper methods with fallbacks
 
 export const analyseContractText = async (contractText) => {
     try {

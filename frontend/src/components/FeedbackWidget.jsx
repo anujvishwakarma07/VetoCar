@@ -12,15 +12,7 @@ const FeedbackWidget = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
-  const [isExpanded, setIsExpanded] = useState(false);
 
-  useEffect(() => {
-    // Continuously expand and contract the button every 8 seconds to attract attention
-    const interval = setInterval(() => {
-      setIsExpanded(prev => !prev);
-    }, 8000);
-    return () => clearInterval(interval);
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -71,52 +63,23 @@ const FeedbackWidget = () => {
 
   return (
     <>
-      {/* Floating Button - Match VetoCar Floating Style (Auto-expanding animation) */}
+      {/* Left Shutter support button - static control panel tab */}
       <button
         onClick={() => setIsOpen(true)}
         className="feedback-float-btn"
-        style={{
-          background: 'var(--bg-surface)',
-          border: '1px solid var(--border)',
-          borderRadius: isExpanded ? '26px' : '50%',
-          width: isExpanded ? '180px' : '52px',
-          height: '52px',
-          padding: '0',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-          color: 'var(--text-main)',
-          fontFamily: 'var(--font-mono)',
-          fontSize: '10px',
-          fontWeight: 700,
-          letterSpacing: '0.06em',
-          cursor: 'pointer',
-          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
-          overflow: 'hidden',
-          transition: 'all 0.6s cubic-bezier(0.19, 1, 0.22, 1)'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.borderColor = 'var(--accent)';
-          e.currentTarget.style.color = 'var(--accent)';
-          e.currentTarget.style.transform = 'translateY(-2px)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.borderColor = 'var(--border)';
-          e.currentTarget.style.color = 'var(--text-main)';
-          e.currentTarget.style.transform = 'translateY(0)';
-        }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '50px', height: '50px', flexShrink: 0 }}>
-          <MessageSquare size={18} style={{ stroke: 'var(--accent)' }} />
-        </div>
+        <MessageSquare size={14} style={{ stroke: 'var(--accent)' }} />
         <span style={{
-          opacity: isExpanded ? 1 : 0,
-          visibility: isExpanded ? 'visible' : 'hidden',
-          whiteSpace: 'nowrap',
-          transition: 'opacity 0.4s ease 0.2s',
-          marginRight: '16px'
+          writingMode: 'vertical-rl',
+          textTransform: 'uppercase',
+          fontSize: '9px',
+          fontFamily: 'var(--font-mono)',
+          fontWeight: 800,
+          letterSpacing: '0.1em',
+          transform: 'rotate(180deg)',
+          marginTop: '4px'
         }}>
-          SUPPORT &amp; QUERY
+          SUPPORT
         </span>
       </button>
 
