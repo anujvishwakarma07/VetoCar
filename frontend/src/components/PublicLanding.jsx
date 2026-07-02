@@ -73,7 +73,7 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
     }
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:8080/api';
+      const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : `http://${window.location.hostname}:8080/api`;
       const endpoint = isRegister ? '/auth/register' : '/auth/login';
       const res = await fetch(`${API_URL}${endpoint}`, {
         method: 'POST',
@@ -308,14 +308,12 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
       </div>
 
       {/* ── Sticky Glassmorphic Header ── */}
-      <div className={`landing-page-content ${showAuth ? 'blurred' : ''}`}>
-        <header className="glass-panel" style={{
-        position: 'sticky', top: 0, zIndex: 999,
-        borderBottom: '1px solid var(--border)',
-        padding: '0 32px', display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between', height: '72px', flexShrink: 0,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <div className={`landing-page-content ${showAuth ? 'blurred' : ''}`} style={{ paddingTop: '72px' }}>
+        <header className="landing-header glass-panel">
+        <div 
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
+        >
           <img src={theme === 'dark' ? darkModeSymbol : lightModeSymbol} alt="VetoCar Mark" style={{ height: '28px', objectFit: 'contain' }} />
           <img src={theme === 'dark' ? darkModeLogo : lightModeLogo} alt="VetoCar" style={{ height: '18px', objectFit: 'contain' }} />
         </div>
@@ -428,13 +426,28 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
       </div>
 
       {/* ── LOWER SCROLLABLE SECTIONS ── */}
-      <div style={{ padding: '0 32px 80px 32px', maxWidth: '1200px', width: '100%', margin: '0 auto', boxSizing: 'border-box', position: 'relative', zIndex: 10 }}>
+      <div className="landing-sections-wrapper">
 
         {/* Bento Grid: Core Capabilities */}
         <div className="landing-section">
-          <h3 style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '32px', color: 'var(--text-muted)' }}>
-            CORE SYSTEM CAPABILITIES //
-          </h3>
+          <div style={{ marginBottom: '40px' }}>
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: '6px',
+              padding: '6px 14px', background: 'var(--bg-hover)',
+              border: '1px solid var(--border)', marginBottom: '18px',
+            }}>
+              <Car size={11} style={{ color: 'var(--accent)' }} />
+              <span style={{ fontSize: '10px', fontWeight: 800, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--text-muted)' }}>
+                CORE SYSTEM CAPABILITIES
+              </span>
+            </div>
+            <h2 className="landing-section-title">
+              Everything you need to beat the dealers
+            </h2>
+            <p style={{ color: 'var(--text-muted)', fontSize: '14px', margin: 0, maxWidth: '600px', lineHeight: '1.6' }}>
+              Audit contracts, decode VIN numbers, simulate monthly payments, and script perfect rebuttals.
+            </p>
+          </div>
 
           <div className="bento-grid">
             {/* Bento Card 1: Auditor (Span 2) */}
@@ -520,7 +533,7 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
 
         {/* Dynamic Simulator & Audit Calculator */}
         <div id="simulator-section" className="landing-section">
-          <div style={{ marginBottom: '48px' }}>
+          <div style={{ marginBottom: '40px' }}>
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: '6px',
               padding: '6px 14px', background: 'var(--bg-hover)',
@@ -531,15 +544,15 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
                 Interactive Simulator
               </span>
             </div>
-            <h2 style={{ fontSize: '38px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em', marginBottom: '16px' }}>
+            <h2 className="landing-section-title">
               Expose Dealer Margins In Real Time
             </h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '15px', maxRight: '560px', margin: 0 }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '14px', margin: 0, maxWidth: '600px', lineHeight: '1.6' }}>
               Adjust the values below to simulate standard dealer markups on acquisition fees, add-on costs, and money factors, and watch VetoCar audit the math instantly.
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: window.innerWidth < 992 ? '1fr' : '1.1fr 0.9fr', gap: '64px', alignItems: 'start' }}>
+          <div className="simulator-grid">
             {/* Sliders Control Card */}
             <div className="card" style={{ padding: '32px', background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: 0, margin: 0 }}>
               {/* Vehicle Preset Selector */}
@@ -696,10 +709,25 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
 
         {/* Workflow Timeline */}
         <div className="landing-section">
-          <h3 style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '40px', color: 'var(--text-muted)' }}>
-            SYSTEM WORKFLOW //
-          </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '40px' }}>
+          <div style={{ marginBottom: '40px' }}>
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: '6px',
+              padding: '6px 14px', background: 'var(--bg-hover)',
+              border: '1px solid var(--border)', marginBottom: '18px',
+            }}>
+              <Sparkles size={11} style={{ color: 'var(--accent)' }} />
+              <span style={{ fontSize: '10px', fontWeight: 800, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--text-muted)' }}>
+                SYSTEM WORKFLOW
+              </span>
+            </div>
+            <h2 className="landing-section-title">
+              Three steps to guaranteed lease savings
+            </h2>
+            <p style={{ color: 'var(--text-muted)', fontSize: '14px', margin: 0, maxWidth: '600px', lineHeight: '1.6' }}>
+              Get professional leverage in minutes using our automated auto-audit diagnostic pipeline.
+            </p>
+          </div>
+          <div className="workflow-grid">
             <div className="step-glow-indicator" style={{ paddingLeft: '24px' }}>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--accent)', fontWeight: 800, marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span style={{ padding: '4px 8px', background: 'rgba(0, 245, 212, 0.1)', border: '1px solid rgba(0, 245, 212, 0.3)' }}>01</span>
@@ -735,9 +763,24 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
 
         {/* FAQs Accordion */}
         <div className="landing-section" style={{ marginBottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-          <h3 style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '40px', color: 'var(--text-muted)', textAlign: 'center', width: '100%' }}>
-            FREQUENTLY ASKED QUESTIONS //
-          </h3>
+          <div style={{ marginBottom: '40px', textAlign: 'center', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: '6px',
+              padding: '6px 14px', background: 'var(--bg-hover)',
+              border: '1px solid var(--border)', marginBottom: '18px',
+            }}>
+              <Sparkles size={11} style={{ color: 'var(--accent)' }} />
+              <span style={{ fontSize: '10px', fontWeight: 800, fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--text-muted)' }}>
+                FAQ
+              </span>
+            </div>
+            <h2 className="landing-section-title">
+              Frequently Asked Questions
+            </h2>
+            <p style={{ color: 'var(--text-muted)', fontSize: '14px', margin: '0 auto', maxWidth: '600px', lineHeight: '1.6' }}>
+              Find answers to common questions about dealer fee markups, safety trims, and AI negotiations.
+            </p>
+          </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '800px', width: '100%' }}>
             {[
@@ -813,24 +856,10 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
       </div>
 
       {/* FOOTER */}
-      <footer style={{
-        borderTop: '1px solid var(--border)',
-        padding: '16px 32px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        fontFamily: 'var(--font-mono)',
-        fontSize: '10px',
-        color: 'var(--text-dim)',
-        letterSpacing: '0.05em',
-        background: 'var(--bg-sidebar)',
-        zIndex: 10,
-        height: '48px',
-        flexShrink: 0
-      }}>
+      <footer className="public-footer">
         <span>© {new Date().getFullYear()} VETOCAR. DESIGN AND DEVELOPED BY ANUJ VISHWAKARMA.</span>
         <span>DESIGNED FOR AUTOMOTIVE INTELLIGENCE</span>
-        </footer>
+      </footer>
       </div>
     </div>
   );
