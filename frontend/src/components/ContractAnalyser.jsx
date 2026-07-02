@@ -14,7 +14,7 @@ const ContractAnalyzer = ({ contractResult, setContractResult, setChatMessages, 
   const [exporting, setExporting] = useState(false);
   const fileInputRef = useRef(null);
 
-  const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:8080/api';
+  const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : `http://${window.location.hostname}:8080/api`;
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -211,7 +211,7 @@ const ContractAnalyzer = ({ contractResult, setContractResult, setChatMessages, 
         const vehicleName = [data.analysis.year, data.analysis.make, data.analysis.model].filter(Boolean).join(' ') || 'vehicle';
         setChatMessages(prev => [
           ...prev,
-          { role: 'bot', text: `✨ System Context Loaded: I have analyzed the terms for your ${vehicleName}. Ask me about this offer!` }
+          { role: 'bot', text: `Yeah, I have got access for the contract of ${vehicleName}. Ask me anything about this offer!` }
         ]);
       }
 
@@ -226,6 +226,10 @@ const ContractAnalyzer = ({ contractResult, setContractResult, setChatMessages, 
   return (
     <div>
       <div className="view-header">
+        <div className="dash-tag" style={{ marginBottom: '10px' }}>
+          <span className="dash-pulse-dot" />
+          <span>CONTRACT AUDIT DECK</span>
+        </div>
         <h1 className="view-title">Contract Analyzer</h1>
         <p className="view-subtitle">Upload your draft contract to review lease parameters and find hidden costs.</p>
       </div>
@@ -300,7 +304,7 @@ const ContractAnalyzer = ({ contractResult, setContractResult, setChatMessages, 
                     if (setChatMessages) {
                       const vehicleName = [c.analysis.year, c.analysis.make, c.analysis.model].filter(Boolean).join(' ') || 'vehicle';
                       setChatMessages([
-                        { role: 'bot', text: `✨ System Context Restored: I have reloaded the terms for your ${vehicleName}. Ask me about this offer!` }
+                        { role: 'bot', text: `Yeah, I have got access for the contract of ${vehicleName}. Ask me anything about this offer!` }
                       ]);
                     }
                   }
@@ -309,7 +313,7 @@ const ContractAnalyzer = ({ contractResult, setContractResult, setChatMessages, 
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  padding: '12px 16px',
+                  padding: '8px 12px',
                   backgroundColor: 'var(--bg-hover)',
                   border: contractResult && contractResult._id === c._id ? '1px solid var(--accent)' : '1px solid var(--border)',
                   borderRadius: '8px',
@@ -318,9 +322,18 @@ const ContractAnalyzer = ({ contractResult, setContractResult, setChatMessages, 
                   boxShadow: contractResult && contractResult._id === c._id ? '0 0 8px rgba(0, 245, 212, 0.15)' : 'none',
                 }}
               >
-                <div>
-                  <p style={{ fontWeight: 600, fontSize: '14px', marginBottom: '4px' }}>{c.fileName}</p>
-                  <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                <div style={{ flex: 1, minWidth: 0, marginRight: '12px' }}>
+                  <p style={{ 
+                    fontWeight: 600, 
+                    fontSize: '13px', 
+                    marginBottom: '2px',
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap'
+                  }} title={c.fileName}>
+                    {c.fileName}
+                  </p>
+                  <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
                     Analyzed on: {new Date(c.uploadedAt || c.createdAt).toLocaleDateString()}
                   </p>
                 </div>
@@ -355,7 +368,7 @@ const ContractAnalyzer = ({ contractResult, setContractResult, setChatMessages, 
         <div style={{ marginTop: '32px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
             <h2 style={{ fontSize: '20px', fontWeight: 700 }}>Analysis Report</h2>
-            <div style={{ display: 'flex', gap: '12px' }}>
+            <div className="report-action-buttons" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
               <button 
                 className="btn"
                 onClick={() => setActiveTab('coach')}
