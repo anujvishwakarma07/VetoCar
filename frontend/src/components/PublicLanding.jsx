@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Sun, Moon, Sparkles, ShieldAlert, CheckCircle2,
   X, ShieldCheck, Zap, RefreshCw, Car, Gauge, Key
@@ -12,6 +12,19 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
   const [showAuth, setShowAuth] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
   const [activeFaq, setActiveFaq] = useState(null);
+
+  // Disable body scroll when authentication modal drawer is open
+  useEffect(() => {
+    if (showAuth) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    // Clean up on component unmount
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showAuth]);
 
   // Auth Form State
   const [username, setUsername] = useState('');
