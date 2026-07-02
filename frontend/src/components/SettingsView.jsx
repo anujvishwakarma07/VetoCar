@@ -25,7 +25,7 @@ const SettingsView = () => {
   const [passSuccess, setPassSuccess] = useState('');
   const [updating, setUpdating] = useState(false);
 
-  const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:8080/api';
+  const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : `http://${window.location.hostname}:8080/api`;
 
   useEffect(() => {
     const fetchProfile = async () => {

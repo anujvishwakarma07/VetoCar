@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MessageSquare, X, Send, AlertTriangle, CheckCircle, HelpCircle } from 'lucide-react';
 
-const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:8080/api';
+const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : `http://${window.location.hostname}:8080/api`;
 
 const FeedbackWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -74,11 +74,8 @@ const FeedbackWidget = () => {
       {/* Floating Button - Match VetoCar Floating Style (Auto-expanding animation) */}
       <button
         onClick={() => setIsOpen(true)}
+        className="feedback-float-btn"
         style={{
-          position: 'fixed',
-          bottom: '30px',
-          right: '30px',
-          zIndex: 999,
           background: 'var(--bg-surface)',
           border: '1px solid var(--border)',
           borderRadius: isExpanded ? '26px' : '50%',

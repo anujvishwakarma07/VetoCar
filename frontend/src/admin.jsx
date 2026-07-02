@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import AdminPanel from './components/AdminPanel.jsx';
 import './index.css';
 
-const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:8080/api';
+const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : `http://${window.location.hostname}:8080/api`;
 const TOKEN_KEY = 'admin_token';
 
 const AdminLogin = ({ onLogin }) => {

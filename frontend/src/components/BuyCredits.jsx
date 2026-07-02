@@ -11,7 +11,7 @@ const BuyCredits = ({ onPaymentSuccess }) => {
   const [mockOrder, setMockOrder] = useState(null);
   const [simulatingPayment, setSimulatingPayment] = useState(false);
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+  const API_URL = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:8080`;
 
   const packages = [
     { credits: 10, price: 499, popular: true, description: 'Best for comparing dealer lease quotes' },
@@ -185,6 +185,10 @@ const BuyCredits = ({ onPaymentSuccess }) => {
   return (
     <div>
       <div className="view-header">
+        <div className="dash-tag" style={{ marginBottom: '10px' }}>
+          <span className="dash-pulse-dot" />
+          <span>DEALER MARGIN SHIELD</span>
+        </div>
         <h1 className="view-title">Top Up Credits</h1>
         <p className="view-subtitle">Add credits to unlock premium contract audits, money factor calculations, and live database plate checks.</p>
       </div>

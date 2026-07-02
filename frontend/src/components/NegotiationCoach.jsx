@@ -169,7 +169,7 @@ const NegotiationCoach = ({
   const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef(null);
 
-  const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:8080/api';
+  const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : `http://${window.location.hostname}:8080/api`;
 
   const scrollToBottom = () => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -274,46 +274,24 @@ const NegotiationCoach = ({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%' }}>
-      <div className="view-header" style={{ marginBottom: '16px', paddingBottom: '16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-          <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--accent)', boxShadow: '0 0 8px var(--accent)' }} />
-          <span style={{ fontSize: '10px', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 800 }}>
-            VetoCar Negotiation Assistant Online
-          </span>
-        </div>
-        <h1 className="view-title" style={{ fontSize: '24px', fontWeight: 800 }}>Negotiation Coach</h1>
-        <p className="view-subtitle">Converse with the coach to strategize deal points, write templates, and review fees.</p>
-      </div>
 
       {/* Contract Context Notification Card */}
       {contractResult && (
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '12px 20px',
-          background: 'var(--bg-hover)',
-          border: '1px solid var(--border)',
-          borderLeft: '4px solid var(--accent)',
-          borderRadius: '4px',
-          marginBottom: '20px',
-          width: '100%',
-          boxSizing: 'border-box'
-        }}>
+        <div className="coach-context-card">
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ padding: '8px', background: 'rgba(0, 245, 212, 0.06)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className="coach-context-icon" style={{ padding: '8px', background: 'rgba(0, 245, 212, 0.06)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Sparkles size={16} style={{ color: 'var(--accent)' }} />
             </div>
             <div>
-              <div style={{ fontSize: '9px', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <div className="coach-context-title-label" style={{ fontSize: '9px', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 Active Negotiation Context
               </div>
-              <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--text-main)' }}>
+              <div className="coach-context-name-text" style={{ fontSize: '13px', fontWeight: 800, color: 'var(--text-main)' }}>
                 {[contractResult.analysis.year, contractResult.analysis.make, contractResult.analysis.model].filter(Boolean).join(' ') || 'Active Document Terms'}
               </div>
             </div>
           </div>
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div className="coach-context-badge-wrap" style={{ display: 'flex', gap: '8px' }}>
             <div style={{ fontSize: '11px', background: 'var(--bg-main)', border: '1px solid var(--border)', padding: '4px 10px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span style={{ fontSize: '9px', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>SCORE</span>
               <strong style={{ color: 'var(--accent)', fontWeight: 800 }}>{contractResult.analysis.fairnessScore ?? 'N/A'}</strong>
@@ -327,8 +305,8 @@ const NegotiationCoach = ({
       )}
 
       {/* Chatbox Window */}
-      <div className="chat-container" style={{ height: 'calc(100vh - 295px)', display: 'flex', flexDirection: 'column' }}>
-        <div className="chat-messages" style={{ flex: 1, overflowY: 'auto', padding: '24px 32px' }}>
+      <div className="chat-container" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+        <div className="chat-messages" style={{ flex: 1, overflowY: 'auto' }}>
           {chatMessages.map((msg, idx) => (
             <div key={idx} style={{
               display: 'flex',
@@ -339,32 +317,7 @@ const NegotiationCoach = ({
               width: msg.role === 'bot' ? '75%' : 'auto',
               marginBottom: '16px'
             }}>
-              {/* Header outside bubble */}
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                marginBottom: '6px',
-                fontSize: '9px',
-                opacity: 0.5,
-                fontWeight: 800,
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                fontFamily: 'var(--font-mono)',
-                alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start'
-              }}>
-                {msg.role === 'bot' ? (
-                  <>
-                    <Bot size={11} style={{ color: 'var(--accent)' }} />
-                    <span>LEASING COACH</span>
-                  </>
-                ) : (
-                  <>
-                    <User size={11} style={{ color: 'var(--text-muted)' }} />
-                    <span>YOU</span>
-                  </>
-                )}
-              </div>
+
 
               {/* Chat bubble containing text only */}
               <div 
@@ -427,7 +380,7 @@ const NegotiationCoach = ({
             value={chatInput}
             onChange={(e) => setChatInput(e.target.value)}
             disabled={sendingChat}
-            style={{ borderRadius: '4px', background: 'var(--bg-main)', border: '1px solid var(--border)' }}
+            style={{ borderRadius: '4px', background: 'var(--bg-main)', border: '1px solid var(--border)', flex: 1, minWidth: 0 }}
           />
           <button type="submit" className="btn" style={{ padding: '14px 24px', borderRadius: '4px' }} disabled={sendingChat || !chatInput.trim()}>
             <Send size={16} />

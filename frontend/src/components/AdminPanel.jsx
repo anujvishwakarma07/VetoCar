@@ -6,7 +6,7 @@ import {
   UserCheck, AlertCircle, AlertTriangle, CheckCircle, Info, MessageSquare
 } from 'lucide-react';
 
-const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:8080/api';
+const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : `http://${window.location.hostname}:8080/api`;
 const COLORS = ['#00ff88', '#00b4d8', '#f77f00', '#e63946', '#a855f7', '#fbbf24'];
 const DEVICE_COLORS = { desktop: '#00ff88', mobile: '#00b4d8', tablet: '#f77f00' };
 

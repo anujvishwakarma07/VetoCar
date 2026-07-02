@@ -4,13 +4,13 @@ import {
   DollarSign, AlertTriangle, ShieldCheck 
 } from 'lucide-react';
 
-const DashboardView = ({ setActiveTab, user, setContractResult }) => {
+const DashboardView = ({ setActiveTab, user, setContractResult, setChatMessages }) => {
   const [contracts, setContracts] = useState([]);
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [timeString, setTimeString] = useState('');
 
-  const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:8080/api';
+  const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : `http://${window.location.hostname}:8080/api`;
 
   useEffect(() => {
     const updateTime = () => {
@@ -102,6 +102,12 @@ const DashboardView = ({ setActiveTab, user, setContractResult }) => {
   const handleNegotiateClick = (contract) => {
     if (setContractResult) {
       setContractResult(contract);
+    }
+    if (setChatMessages) {
+      const vehicleName = [contract.analysis.year, contract.analysis.make, contract.analysis.model].filter(Boolean).join(' ') || 'vehicle';
+      setChatMessages([
+        { role: 'bot', text: `Yeah, I have got access for the contract of ${vehicleName}. Ask me anything about this offer!` }
+      ]);
     }
     setActiveTab('coach');
   };
