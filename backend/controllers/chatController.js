@@ -11,12 +11,18 @@ export const handleChat = async (req, res) => {
             });
         }
 
+        console.log('Incoming Chat Request:', { message, contractId });
         let contractAnalysis = null;
         if (contractId) {
             const contract = await Contract.findById(contractId);
             if (contract) {
+                console.log('Found contract for chat context:', contract.fileName);
                 contractAnalysis = contract.analysis;
+            } else {
+                console.warn('Contract ID provided but not found in DB:', contractId);
             }
+        } else {
+            console.log('No contractId provided in chat payload.');
         }
 
         const responseText = await chatWithCoach(message, history || [], contractAnalysis);

@@ -10,6 +10,10 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const getMockContractAnalysis = () => {
     return {
         contractType: "Lease",
+        year: 2023,
+        make: "Toyota",
+        model: "RAV4",
+        vehicleName: "2023 Toyota RAV4",
         interestRateOrAPR: 6.2,
         leaseTermMonths: 36,
         monthlyPayment: 489.00,
@@ -126,6 +130,10 @@ export const analyseContractText = async (contractText) => {
         Return a JSON object conforming EXACTLY to the following structure:
         {
             "contractType": "Lease" or "Loan" or "Unknown",
+            "year": number (e.g., 2024) or null,
+            "make": "string (e.g., Toyota)" or null,
+            "model": "string (e.g., RAV4)" or null,
+            "vehicleName": "string (e.g., 2024 Toyota RAV4)" or null,
             "interestRateOrAPR": number (percentage, e.g., 5.9) or null,
             "leaseTermMonths": number (months, e.g., 36) or null,
             "monthlyPayment": number (dollars, e.g., 420.50) or null,
