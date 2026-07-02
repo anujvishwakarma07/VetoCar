@@ -7,7 +7,8 @@ import vinRoutes from './routes/vinRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import paymentRoutes from './routes/paymentsRoutes.js';
-
+import adminRoutes from './routes/adminRoutes.js';
+import analyticsMiddleware from './middlewares/analyticsMiddleware.js';
 
 dotenv.config();
 connectDB();
@@ -15,11 +16,9 @@ connectDB();
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-
-//Middlewares
 app.use(cors());
 app.use(express.json());
-
+app.use(analyticsMiddleware);
 
 // Register Api route
 app.use('/api/auth', authRoutes);
@@ -27,6 +26,7 @@ app.use('/api/contracts', contractRoutes);
 app.use('/api/vin', vinRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/payment', paymentRoutes);
+app.use('/api/admin', adminRoutes);
 
 
 //Testing route
