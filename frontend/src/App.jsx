@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Sparkles, Sun, Moon, Menu, X, Settings, Coins } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Sparkles, Sun, Moon, Menu, X, Settings, Coins, LayoutDashboard, FileSearch, Car, MessageSquare, GitCompare } from 'lucide-react';
 import Sidebar from './components/Sidebar.jsx';
 import DashboardView from './components/DashboardView.jsx';
 import ContractAnalyser from './components/ContractAnalyser.jsx';
@@ -19,8 +19,33 @@ import darkModeSymbol from './assets/darkModeSymbolic.png';
 import lightModeSymbol from './assets/lightModeSybolic.png';
 
 function App() {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState(() => {
+    const path = window.location.pathname.replace(/^\/|\/$/g, '');
+    const validTabs = ['dashboard', 'analyzer', 'vin', 'coach', 'compare', 'buy_credits', 'settings'];
+    return validTabs.includes(path) ? path : 'dashboard';
+  });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Sync URL path with activeTab change
+  useEffect(() => {
+    const path = window.location.pathname.replace(/^\/|\/$/g, '');
+    if (path !== activeTab) {
+      const newPath = activeTab === 'dashboard' && path === '' ? '/' : `/${activeTab}`;
+      window.history.pushState({ tab: activeTab }, '', newPath);
+    }
+  }, [activeTab]);
+
+  // Handle browser back/forward buttons
+  useEffect(() => {
+    const handlePopState = () => {
+      const path = window.location.pathname.replace(/^\/|\/$/g, '');
+      const validTabs = ['dashboard', 'analyzer', 'vin', 'coach', 'compare', 'buy_credits', 'settings'];
+      const targetTab = validTabs.includes(path) ? path : 'dashboard';
+      setActiveTab(targetTab);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   // Theme state persisted in localStorage
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
@@ -34,8 +59,32 @@ function App() {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
   const [contractResult, setContractResult] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
+  
+  // Synchronous session checking on first render to prevent redirect flicker
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return !!payload.id;
+      } catch (_) {
+        localStorage.removeItem('token');
+      }
+    }
+    return false;
+  });
+
+  const [user, setUser] = useState(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return { username: payload.username, id: payload.id };
+      } catch (_) {}
+    }
+    return null;
+  });
+
   const [credits, setCredits] = useState(0);
 
   // Sync user credits on mount / tab swaps
@@ -44,7 +93,7 @@ function App() {
     const fetchUserCredits = async () => {
       try {
         const token = localStorage.getItem('token');
-        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+        const API_URL = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:8080`;
         const res = await fetch(`${API_URL}/api/auth/profile`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -59,20 +108,7 @@ function App() {
     fetchUserCredits();
   }, [isAuthenticated, activeTab]);
 
-  // Auto-restore session from token
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        setUser({ username: payload.username, id: payload.id });
-        setIsAuthenticated(true);
-      } catch (err) {
-        console.error('Session restore failed:', err);
-        localStorage.removeItem('token');
-      }
-    }
-  }, []);
+  // Clean up session restore useEffect as we now do it synchronously
 
   // Preload logos
   useEffect(() => {
@@ -87,7 +123,7 @@ function App() {
   const [chatMessages, setChatMessages] = useState([
     {
       role: 'bot',
-      text: 'Hello! I am your AI Car Negotiation Coach.\n\nI can help you review dealer pricing sheets, draft professional emails to salespeople, or advice you on specific terms like acquisition fees, doc fees, and money factors.\n\nIf you have uploaded a contract in the Contract Analyzer tab, I will automatically use its numbers to give you custom negotiation counter-offers!'
+      text: 'Hello! I am Veto, your AI Car Negotiation Coach.\n\nI can help you review dealer pricing sheets, draft professional counter-offers, and flag hidden markups like doc fees, acquisition fees, and money factors. My goal is to make sure you get the absolute best deal without getting ripped off!\n\nIf you have uploaded a contract in the Audit tab, I will automatically use its terms to help you negotiate it.'
     }
   ]);
   const [chatHistory, setChatHistory] = useState([]);
@@ -101,10 +137,19 @@ function App() {
     }
   }, [activeTab]);
 
-  // Auto-redirect to home dashboard upon login success
+  // Handle routing redirects on login & logout state transitions
   useEffect(() => {
     if (isAuthenticated) {
-      setActiveTab('dashboard');
+      // Direct user to dashboard if they log in from the root path
+      const path = window.location.pathname.replace(/^\/|\/$/g, '');
+      if (path === '') {
+        setActiveTab('dashboard');
+      }
+    } else {
+      // Clear route path back to root when logged out
+      if (window.location.pathname !== '/') {
+        window.history.pushState({}, '', '/');
+      }
     }
   }, [isAuthenticated]);
 
@@ -153,7 +198,10 @@ function App() {
             {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div 
+            onClick={() => { setActiveTab('dashboard'); setIsSidebarOpen(false); }}
+            style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}
+          >
             <img 
               src={theme === 'dark' ? darkModeSymbol : lightModeSymbol} 
               alt="VetoCar Mark" 
@@ -189,6 +237,7 @@ function App() {
           setActiveTab={setActiveTab}
           setIsAuthenticated={setIsAuthenticated}
           setUser={setUser}
+          user={user}
           theme={theme}
           toggleTheme={toggleTheme}
           isAuthenticated={isAuthenticated}
@@ -305,13 +354,14 @@ function App() {
             </div>
           </div>
 
-          <div className="main-content" style={activeTab === 'coach' ? { overflow: 'hidden', padding: '32px 80px 16px 80px', height: '100%' } : { overflowY: 'auto' }}>
+          <div className={`main-content ${activeTab === 'coach' ? 'coach-active' : ''}`}>
             {activeTab === 'dashboard' && (
               <DashboardView 
                 setActiveTab={setActiveTab} 
                 user={user} 
                 theme={theme} 
                 setContractResult={setContractResult} 
+                setChatMessages={setChatMessages}
               />
             )}
 
@@ -380,11 +430,50 @@ function App() {
                 <AuthView setIsAuthenticated={setIsAuthenticated} setUser={setUser} />
               )
             )}
-            <Footer theme={theme} setActiveTab={setActiveTab} />
+            {activeTab !== 'coach' && <Footer theme={theme} setActiveTab={setActiveTab} />}
           </div>
         </div>
       </div>
       <FeedbackWidget />
+      {isAuthenticated && (
+        <div className="mobile-bottom-nav">
+          <button 
+            onClick={() => setActiveTab('dashboard')} 
+            className={`bottom-nav-item ${activeTab === 'dashboard' ? 'active' : ''}`}
+          >
+            <LayoutDashboard size={18} />
+            <span>Dashboard</span>
+          </button>
+          <button 
+            onClick={() => setActiveTab('analyzer')} 
+            className={`bottom-nav-item ${activeTab === 'analyzer' ? 'active' : ''}`}
+          >
+            <FileSearch size={18} />
+            <span>Audit</span>
+          </button>
+          <button 
+            onClick={() => setActiveTab('vin')} 
+            className={`bottom-nav-item ${activeTab === 'vin' ? 'active' : ''}`}
+          >
+            <Car size={18} />
+            <span>VIN</span>
+          </button>
+          <button 
+            onClick={() => setActiveTab('coach')} 
+            className={`bottom-nav-item ${activeTab === 'coach' ? 'active' : ''}`}
+          >
+            <MessageSquare size={18} />
+            <span>Coach</span>
+          </button>
+          <button 
+            onClick={() => setActiveTab('compare')} 
+            className={`bottom-nav-item ${activeTab === 'compare' ? 'active' : ''}`}
+          >
+            <GitCompare size={18} />
+            <span>Compare</span>
+          </button>
+        </div>
+      )}
     </>
   );
 

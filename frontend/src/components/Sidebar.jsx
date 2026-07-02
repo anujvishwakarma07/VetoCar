@@ -17,7 +17,7 @@ import lightModeLogo from '../assets/LightModeTextual.png';
 import darkModeSymbol from '../assets/darkModeSymbolic.png';
 import lightModeSymbol from '../assets/lightModeSybolic.png';
 
-const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, theme, toggleTheme, isAuthenticated, isOpen, setIsOpen, credits }) => {
+const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, user, theme, toggleTheme, isAuthenticated, isOpen, setIsOpen, credits }) => {
   const handleSignOut = () => {
     if (setIsAuthenticated) setIsAuthenticated(false);
     if (setUser) setUser(null);
@@ -35,7 +35,11 @@ const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, theme, 
   return (
     <div className={`sidebar ${isOpen ? 'open' : ''}`}>
       {/* Brand Logo */}
-      <div className="sidebar-logo" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
+      <div 
+        className="sidebar-logo" 
+        onClick={() => setActiveTab('dashboard')}
+        style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
+      >
         <img 
           src={theme === 'dark' ? darkModeSymbol : lightModeSymbol} 
           alt="VetoCar Mark" 
@@ -46,6 +50,95 @@ const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, theme, 
           alt="VetoCar Logo" 
           style={{ height: '20px', width: 'auto', objectFit: 'contain' }} 
         />
+      </div>
+
+      {/* Mobile Drawer Quick Stats Bar */}
+      <div className="sidebar-mobile-stats" style={{
+        display: 'none', // Overridden to flex on mobile via CSS
+        flexWrap: 'wrap',
+        gap: '8px',
+        padding: '0 20px 20px 20px',
+        borderBottom: '1px solid var(--border)',
+        marginBottom: '20px'
+      }}>
+        {/* Credits Pill */}
+        <div 
+          onClick={() => handleItemClick('buy_credits')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '6px 10px',
+            border: '1px solid var(--border)',
+            borderRadius: '4px',
+            background: 'rgba(255, 255, 255, 0.01)',
+            cursor: 'pointer',
+            fontSize: '10px',
+            fontFamily: 'var(--font-mono)',
+            fontWeight: 800,
+            color: 'var(--accent)',
+          }}
+        >
+          <Coins size={12} />
+          <span>{credits} CREDITS</span>
+        </div>
+
+        {/* Profile Pill */}
+        <div 
+          onClick={() => handleItemClick('settings')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '6px 10px',
+            border: '1px solid var(--border)',
+            borderRadius: '4px',
+            background: 'rgba(255, 255, 255, 0.01)',
+            cursor: 'pointer',
+            fontSize: '10px',
+            fontFamily: 'var(--font-mono)',
+            fontWeight: 800,
+            color: 'var(--text-main)',
+          }}
+        >
+          <div style={{
+            width: '14px',
+            height: '14px',
+            backgroundColor: 'rgba(0, 245, 212, 0.1)',
+            color: 'var(--accent)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '9px',
+            fontWeight: 800,
+            borderRadius: '2px'
+          }}>
+            {user?.username ? user.username.charAt(0).toUpperCase() : 'U'}
+          </div>
+          <span>{user?.username ? user.username.toUpperCase() : 'USER'}</span>
+        </div>
+
+        {/* Theme Toggle Pill */}
+        <div 
+          onClick={toggleTheme}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '6px 10px',
+            border: '1px solid var(--border)',
+            borderRadius: '4px',
+            background: 'rgba(255, 255, 255, 0.01)',
+            cursor: 'pointer',
+            fontSize: '10px',
+            fontFamily: 'var(--font-mono)',
+            fontWeight: 800,
+            color: 'var(--text-main)',
+          }}
+        >
+          {theme === 'dark' ? <Sun size={12} style={{ color: 'var(--accent)' }} /> : <Moon size={12} />}
+          <span>THEME</span>
+        </div>
       </div>
 
       {/* Menu Options */}
