@@ -127,7 +127,7 @@ const DashboardView = ({ setActiveTab, user, setContractResult }) => {
             WELCOME BACK, <span className="dash-accent-name">{profileData?.user?.username?.toUpperCase() || user?.username?.toUpperCase() || 'AGENT'}</span>
           </h1>
           <p className="dash-subtitle">
-            Your AI lease diagnostic deck is synchronized. Upload and review contracts to negotiate like a professional.
+            Your lease diagnostic deck is synchronized. Upload and review contracts to negotiate like a professional.
           </p>
         </div>
         <div className="dash-time-panel">
@@ -178,12 +178,11 @@ const DashboardView = ({ setActiveTab, user, setContractResult }) => {
                 <span className="dash-metric-title">VIN ENGINE LOOKUPS</span>
                 <Car size={16} className="dash-metric-icon" />
               </div>
-              <div className="dash-metric-value">{credits} / 15</div>
+              <div className="dash-metric-value">{profileData?.stats?.vinLookups || 0}</div>
               <div className="dash-metric-footer">
-                <div className="dash-progress-track">
-                  <div className="dash-progress-fill" style={{ width: `${creditFillPct}%` }} />
-                </div>
-                <span className="dash-progress-text">{credits} active credits</span>
+                <span className="dash-trend positive">
+                  {profileData?.stats?.vinLookups > 0 ? `+${profileData.stats.vinLookups} decodes completed` : 'No lookup history'}
+                </span>
               </div>
             </div>
 

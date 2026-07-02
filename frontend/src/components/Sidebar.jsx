@@ -17,7 +17,7 @@ import lightModeLogo from '../assets/LightModeTextual.png';
 import darkModeSymbol from '../assets/darkModeSymbolic.png';
 import lightModeSymbol from '../assets/lightModeSybolic.png';
 
-const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, theme, toggleTheme, isAuthenticated, isOpen, setIsOpen }) => {
+const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, theme, toggleTheme, isAuthenticated, isOpen, setIsOpen, credits }) => {
   const handleSignOut = () => {
     if (setIsAuthenticated) setIsAuthenticated(false);
     if (setUser) setUser(null);
@@ -91,14 +91,6 @@ const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, theme, 
         </div>
 
         <div
-          className={`sidebar-item ${activeTab === 'settings' ? 'active' : ''}`}
-          onClick={() => handleItemClick('settings')}
-        >
-          <Settings size={20} />
-          <span>Settings</span>
-        </div>
-
-        <div
           className={`sidebar-item ${activeTab === 'buy_credits' ? 'active' : ''}`}
           onClick={() => handleItemClick('buy_credits')}
         >
@@ -106,22 +98,11 @@ const Sidebar = ({ activeTab, setActiveTab, setIsAuthenticated, setUser, theme, 
           <span>Buy Credits</span>
         </div>
 
-        {/* Theme Toggle Button */}
-        <div
-          className="sidebar-item desktop-only"
-          onClick={toggleTheme}
-          style={{ marginTop: 'auto', borderTop: '1px solid var(--border)' }}
-        >
-          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-          <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
-        </div>
-
-        {/* Dynamic Log Out Button */}
         {isAuthenticated && (
           <div
             className="sidebar-item"
             onClick={handleSignOut}
-            style={{ color: 'var(--text-dim)' }}
+            style={{ marginTop: 'auto', borderTop: '1px solid var(--border)', color: 'var(--text-dim)' }}
           >
             <LogOut size={20} />
             <span>Sign Out</span>

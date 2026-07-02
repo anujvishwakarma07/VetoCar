@@ -339,7 +339,7 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
             <Car size={12} style={{ color: 'var(--accent)' }} />
             <span>VetoCar Auto Audit</span>
             <Sparkles size={11} style={{ color: 'var(--accent)' }} />
-            <span>Powered by Gemini AI</span>
+            <span>Powered by VetoCar Diagnostic Engine</span>
           </div>
 
           <h1 className="hero-title-large">
@@ -699,11 +699,11 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
             <div className="step-glow-indicator" style={{ paddingLeft: '24px' }}>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-dim)', fontWeight: 800, marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span style={{ padding: '4px 8px', background: 'var(--bg-hover)', border: '1px solid var(--border)' }}>02</span>
-                <span>AI SEMANTIC AUDIT</span>
+                <span>VETOCAR SMART AUDIT</span>
               </div>
               <h4 style={{ fontSize: '16px', fontWeight: 700, textTransform: 'uppercase', marginBottom: '8px' }}>Detect Markup</h4>
               <p style={{ color: 'var(--text-muted)', fontSize: '13px', lineHeight: '1.7' }}>
-                Gemini isolates hidden dealer markups on interest rate (money factor), calculates residual value accuracy, and flags add-on compliance.
+                The diagnostic engine isolates hidden dealer markups on interest rate (money factor), calculates residual value accuracy, and flags add-on compliance.
               </p>
             </div>
             <div className="step-glow-indicator" style={{ paddingLeft: '24px' }}>
@@ -733,7 +733,7 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
               },
               {
                 q: "What types of documents can VetoCar scan?",
-                a: "You can upload draft dealer worksheets, quotation sheets, final lease agreements, or purchase proposals in PDF format. As long as it lists monthly payments, residual percentages, sales prices, and fees, Gemini can extract and audit it."
+                a: "You can upload draft dealer worksheets, quotation sheets, final lease agreements, or purchase proposals in PDF format. As long as it lists monthly payments, residual percentages, sales prices, and fees, VetoCar can extract and audit it."
               },
               {
                 q: "Is my personal financial information secure?",
@@ -741,11 +741,11 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
               },
               {
                 q: "Can I use this for purchase loans, or only leases?",
-                a: "While our core analyzer specializes in complex auto lease calculations (such as residual values and acquisition fee inflation), the AI Negotiation Coach can help write emails and objections handling responses for standard finance loans and out-the-door purchase negotiations too!"
+                a: "While our core analyzer specializes in complex auto lease calculations (such as residual values and acquisition fee inflation), the Negotiation Coach can help write emails and objections handling responses for standard finance loans and out-the-door purchase negotiations too!"
               },
               {
-                q: "How does the AI Negotiation Coach work?",
-                a: "Once you upload a contract, its parameters (like trim level, MSRP, monthly fee, and markups) are saved in memory. When you switch to the coach tab, Gemini uses that exact data to script professional objection emails and rebuttal arguments to counter the dealer's sales tactics."
+                q: "How does the Negotiation Coach work?",
+                a: "Once you upload a contract, its parameters (like trim level, MSRP, monthly fee, and markups) are saved in memory. When you switch to the coach tab, the diagnostic engine uses that exact data to script professional objection emails and rebuttal arguments to counter the dealer's sales tactics."
               }
             ].map((faq, index) => {
               const isOpen = activeFaq === index;
@@ -814,7 +814,7 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
         height: '48px',
         flexShrink: 0
       }}>
-        <span>© {new Date().getFullYear()} VETOCAR. STARK ARCHITECT SYSTEM. ALL RIGHTS RESERVED.</span>
+        <span>© {new Date().getFullYear()} VETOCAR. DESIGN AND DEVELOPED BY ANUJ VISHWAKARMA.</span>
         <span>DESIGNED FOR AUTOMOTIVE INTELLIGENCE</span>
       </footer>
     </div>
