@@ -1,6 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import { getTrafficStats } from '../controllers/adminController.js';
+import { getAllFeedback, updateFeedbackStatus } from '../controllers/feedbackController.js';
 import Traffic from '../models/Traffic.js';
 
 const router = express.Router();
@@ -57,6 +58,9 @@ router.delete('/clear-traffic', adminGuard, async (req, res) => {
         return res.status(500).json({ error: 'Failed to clear traffic data' });
     }
 });
+
+router.get('/feedback', adminGuard, getAllFeedback);
+router.patch('/feedback/:id/status', adminGuard, updateFeedbackStatus);
 
 export default router;
 

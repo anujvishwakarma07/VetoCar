@@ -11,7 +11,7 @@ import OfferComparision from './components/OfferComparision.jsx';
 import SettingsView from './components/SettingsView.jsx';
 import BuyCredits from './components/BuyCredits.jsx';
 import PublicLanding from './components/PublicLanding.jsx';
-import { Agentation } from 'agentation';
+import FeedbackWidget from './components/FeedbackWidget.jsx';
 
 import darkModeLogo from './assets/darkModeTextual.png';
 import lightModeLogo from './assets/LightModeTextual.png';
@@ -112,20 +112,19 @@ function App() {
   if (!isAuthenticated) {
     return (
       <>
-        <Agentation />
         <PublicLanding
           setIsAuthenticated={setIsAuthenticated}
           setUser={setUser}
           theme={theme}
           toggleTheme={toggleTheme}
         />
+        <FeedbackWidget />
       </>
     );
   }
 
   return (
     <>
-      <Agentation />
       <div className="dashboard-layout">
         {/* Backdrop overlay for mobile drawer */}
         {isSidebarOpen && (
@@ -385,6 +384,7 @@ function App() {
           </div>
         </div>
       </div>
+      <FeedbackWidget />
     </>
   );
 

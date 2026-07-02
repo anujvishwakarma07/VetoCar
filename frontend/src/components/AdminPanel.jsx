@@ -3,7 +3,7 @@ import {
   Activity, Users, Globe, Monitor, Smartphone, Tablet,
   TrendingUp, Zap, RefreshCw, Shield, Server,
   ArrowUpRight, Wifi, FileSearch, Coins, Car,
-  UserCheck, AlertCircle
+  UserCheck, AlertCircle, AlertTriangle, CheckCircle, Info, MessageSquare
 } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:8080/api';
@@ -159,6 +159,14 @@ const AdminPanel = ({ adminToken }) => {
   const [clearing, setClearing] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [clearResult, setClearResult] = useState('');
+
+  // Feedback states
+  const [feedbacks, setFeedbacks] = useState([]);
+  const [feedbackCounts, setFeedbackCounts] = useState([]);
+  const [feedbackTypeCounts, setFeedbackTypeCounts] = useState([]);
+  const [feedbackLoading, setFeedbackLoading] = useState(false);
+  const [updatingId, setUpdatingId] = useState(null);
+
   const intervalRef = useRef(null);
 
   const fetchStats = async (silent = false) => {
@@ -185,9 +193,57 @@ const AdminPanel = ({ adminToken }) => {
     }
   };
 
+  const fetchFeedback = async () => {
+    setFeedbackLoading(true);
+    try {
+      const token = adminToken || localStorage.getItem('admin_token');
+      const res = await fetch(`${API_URL}/admin/feedback`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (!res.ok) throw new Error('Failed to load feedback');
+      const data = await res.json();
+      setFeedbacks(data.feedbacks || []);
+      setFeedbackCounts(data.counts || []);
+      setFeedbackTypeCounts(data.typeCounts || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setFeedbackLoading(false);
+    }
+  };
+
+  const handleUpdateFeedbackStatus = async (id, newStatus) => {
+    setUpdatingId(id);
+    try {
+      const token = adminToken || localStorage.getItem('admin_token');
+      const res = await fetch(`${API_URL}/admin/feedback/${id}/status`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
+      if (!res.ok) throw new Error('Failed to update feedback status');
+      // Update locally
+      setFeedbacks(prev => prev.map(f => f._id === id ? { ...f, status: newStatus } : f));
+      // Refresh count summary
+      fetchFeedback();
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
   useEffect(() => {
     fetchStats();
-    intervalRef.current = setInterval(() => fetchStats(true), 30000);
+    intervalRef.current = setInterval(() => {
+      fetchStats(true);
+      if (activeSection === 'feedback') {
+        fetchFeedback();
+      }
+    }, 30000);
     return () => clearInterval(intervalRef.current);
   }, []);
 
@@ -215,6 +271,12 @@ const AdminPanel = ({ adminToken }) => {
     }
   };
 
+  useEffect(() => {
+    if (activeSection === 'feedback') {
+      fetchFeedback();
+    }
+  }, [activeSection]);
+
   if (error) return (
     <div className="admin-error-state">
       <Shield size={48} color="#e63946" />
@@ -224,7 +286,7 @@ const AdminPanel = ({ adminToken }) => {
   );
 
   const ov = stats?.overview || {};
-  const sections = ['overview', 'users', 'contracts', 'traffic'];
+  const sections = ['overview', 'users', 'contracts', 'traffic', 'feedback'];
 
   return (
     <div className="admin-panel">
@@ -616,8 +678,182 @@ const AdminPanel = ({ adminToken }) => {
           </div>
         </>
       )}
+
+      {/* ── FEEDBACK SECTION ──────────────────────────────────────── */}
+      {activeSection === 'feedback' && (
+        <>
+          {/* Feedback statistics summary */}
+          <div className="admin-metrics-grid">
+            <MetricCard
+              icon={MessageSquare}
+              label="TOTAL TICKETS"
+              value={feedbacks.length}
+              sub="All submissions"
+              color="#00b4d8"
+              loading={feedbackLoading}
+            />
+            <MetricCard
+              icon={AlertTriangle}
+              label="NEW/UNREAD"
+              value={feedbackCounts.find(c => c._id === 'new')?.count || 0}
+              sub="Action required"
+              color="#e63946"
+              loading={feedbackLoading}
+            />
+            <MetricCard
+              icon={CheckCircle}
+              label="RESOLVED"
+              value={feedbackCounts.find(c => c._id === 'resolved')?.count || 0}
+              sub="Completed tickets"
+              color="#00ff88"
+              loading={feedbackLoading}
+            />
+            <MetricCard
+              icon={Info}
+              label="BUGS REPORTED"
+              value={feedbackTypeCounts.find(c => c._id === 'bug')?.count || 0}
+              sub="Technical issues"
+              color="#f77f00"
+              loading={feedbackLoading}
+            />
+            <MetricCard
+              icon={MessageSquare}
+              label="GENERAL FEEDBACK"
+              value={feedbackTypeCounts.find(c => c._id === 'feedback')?.count || 0}
+              sub="User reviews"
+              color="#a855f7"
+              loading={feedbackLoading}
+            />
+            <MetricCard
+              icon={Globe}
+              label="QUERIES"
+              value={feedbackTypeCounts.find(c => c._id === 'query')?.count || 0}
+              sub="General questions"
+              color="#fbbf24"
+              loading={feedbackLoading}
+            />
+          </div>
+
+          <div className="admin-card admin-card-full">
+            <div className="admin-chart-title">USER QUERIES &amp; FEEDBACK LOG</div>
+            {feedbackLoading && feedbacks.length === 0 ? (
+              <div className="admin-skeleton" style={{ height: 280 }} />
+            ) : (
+              <div className="admin-requests-table-wrap">
+                <table className="admin-requests-table">
+                  <thead>
+                    <tr>
+                      <th style={{ width: '80px' }}>TYPE</th>
+                      <th style={{ width: '120px' }}>USER</th>
+                      <th style={{ width: '160px' }}>EMAIL</th>
+                      <th style={{ width: '140px' }}>PAGE CONTEXT</th>
+                      <th>MESSAGE</th>
+                      <th style={{ width: '120px' }}>STATUS</th>
+                      <th style={{ width: '110px' }}>SUBMITTED</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {feedbacks.map((f) => {
+                      const badgeColor =
+                        f.type === 'bug' ? '#e63946' : f.type === 'query' ? '#fbbf24' : '#00b4d8';
+                      return (
+                        <tr key={f._id} style={{ opacity: f.status === 'resolved' ? 0.6 : 1 }}>
+                          <td>
+                            <span style={{
+                              display: 'inline-block',
+                              padding: '2px 6px',
+                              borderRadius: '3px',
+                              fontSize: '8px',
+                              fontWeight: 700,
+                              fontFamily: 'var(--font-mono)',
+                              textTransform: 'uppercase',
+                              background: badgeColor + '18',
+                              color: badgeColor,
+                              border: `1px solid ${badgeColor}30`
+                            }}>
+                              {f.type}
+                            </span>
+                          </td>
+                          <td style={{ color: '#fff', fontWeight: 600 }}>
+                            {f.userId ? f.userId.username : f.name}
+                            {f.userId && (
+                              <span style={{
+                                fontSize: '8px',
+                                color: '#00ff88',
+                                marginLeft: '4px',
+                                fontFamily: 'var(--font-mono)'
+                              }}>
+                                (Reg)
+                              </span>
+                            )}
+                          </td>
+                          <td>
+                            {f.email ? (
+                              <a href={`mailto:${f.email}`} style={{ color: '#00b4d8', textDecoration: 'none' }}>
+                                {f.email}
+                              </a>
+                            ) : (
+                              <span style={{ color: 'var(--text-dim)' }}>—</span>
+                            )}
+                          </td>
+                          <td style={{ color: 'var(--text-dim)', fontSize: '9px', fontFamily: 'var(--font-mono)' }}>
+                            {f.page || 'Unknown'}
+                          </td>
+                          <td style={{ color: 'var(--text-main)', fontSize: '11px', whiteSpace: 'pre-wrap', lineHeight: '1.5', padding: '10px 8px' }}>
+                            {f.message}
+                          </td>
+                          <td>
+                            <select
+                              value={f.status}
+                              disabled={updatingId === f._id}
+                              onChange={(e) => handleUpdateFeedbackStatus(f._id, e.target.value)}
+                              style={{
+                                background: '#0a0a0a',
+                                border: '1px solid ' + (
+                                  f.status === 'new' ? '#e6394640' : f.status === 'resolved' ? '#00ff8840' : '#fbbf2440'
+                                ),
+                                borderRadius: '4px',
+                                color: f.status === 'new' ? '#e63946' : f.status === 'resolved' ? '#00ff88' : '#fbbf24',
+                                fontSize: '10px',
+                                fontWeight: 700,
+                                fontFamily: 'var(--font-mono)',
+                                padding: '4px 6px',
+                                outline: 'none',
+                                cursor: 'pointer'
+                              }}
+                            >
+                              <option value="new">🔴 NEW</option>
+                              <option value="read">🟡 READ</option>
+                              <option value="resolved">🟢 RESOLVED</option>
+                            </select>
+                          </td>
+                          <td className="admin-time-cell">
+                            {new Date(f.createdAt).toLocaleDateString('en-GB', {
+                              day: '2-digit',
+                              month: 'short',
+                              year: 'numeric'
+                            })}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                    {feedbacks.length === 0 && (
+                      <tr>
+                        <td colSpan={7} style={{ textAlign: 'center', padding: '40px', color: 'var(--text-dim)', fontSize: '11px', fontFamily: 'var(--font-mono)' }}>
+                          NO FEEDBACK OR QUERIES RECORDED YET
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
+
 };
 
 export default AdminPanel;

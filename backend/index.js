@@ -9,6 +9,7 @@ import authRoutes from './routes/authRoutes.js';
 import paymentRoutes from './routes/paymentsRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import analyticsMiddleware from './middlewares/analyticsMiddleware.js';
+import feedbackRoutes from './routes/feedbackRoutes.js';
 
 dotenv.config();
 connectDB();
@@ -27,6 +28,7 @@ app.use('/api/vin', vinRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 
 //Testing route
