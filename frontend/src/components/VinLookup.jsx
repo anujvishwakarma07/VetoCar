@@ -259,7 +259,7 @@ const VinLookup = ({ userCredits, setCredits, setActiveTab }) => {
   const [indianError, setIndianError] = useState('');
   const [indianQuota, setIndianQuota] = useState(false);
 
-  const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:8080/api';
+  const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : `http://${window.location.hostname}:8080/api`;
 
   const handleDecodeVin = async (e) => {
     e.preventDefault();
@@ -366,6 +366,10 @@ const VinLookup = ({ userCredits, setCredits, setActiveTab }) => {
   return (
     <div>
       <div className="view-header">
+        <div className="dash-tag" style={{ marginBottom: '10px' }}>
+          <span className="dash-pulse-dot" />
+          <span>SPEC DECODER PORTAL</span>
+        </div>
         <h1 className="view-title">VIN & Plate Lookup</h1>
         <p className="view-subtitle">
           Retrieve verified vehicle specifications from official government databases — instantly and accurately.
@@ -373,7 +377,7 @@ const VinLookup = ({ userCredits, setCredits, setActiveTab }) => {
       </div>
 
       {/* Mode Toggle Tabs */}
-      <div style={{ display: 'flex', marginBottom: '28px', borderBottom: '1px solid var(--border)' }}>
+      <div className="lookup-tab-container">
         <TabBtn active={activeMode === 'vin'} onClick={() => setActiveMode('vin')} icon={<Hash size={14} />} label="VIN Number" />
         <TabBtn active={activeMode === 'plate'} onClick={() => setActiveMode('plate')} icon={<MapPin size={14} />} label="US Plate" />
         <TabBtn active={activeMode === 'indian'} onClick={() => setActiveMode('indian')} icon={<Flag size={14} />} label="Indian RC" />
