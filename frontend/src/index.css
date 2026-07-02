@@ -2958,10 +2958,7 @@ select option {
     font-size: 9px !important;
   }
 
-  /* Render mobile sidebar quick status bar pills */
-  .sidebar-mobile-stats {
-    display: flex !important;
-  }
+
 
   /* Public landing mobile padding alignment (matches 16px mobile dashboard padding) */
   .landing-header {

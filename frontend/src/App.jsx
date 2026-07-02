@@ -86,6 +86,7 @@ function App() {
   });
 
   const [credits, setCredits] = useState(0);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   // Sync user credits on mount / tab swaps
   useEffect(() => {
@@ -213,23 +214,113 @@ function App() {
               style={{ height: '18px', objectFit: 'contain' }} 
             />
           </div>
-          <button
-            onClick={toggleTheme}
-            style={{
-              marginLeft: 'auto',
-              background: 'none',
-              border: 'none',
-              color: 'var(--text-main)',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '8px'
-            }}
-            aria-label="Toggle theme"
-          >
-            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
+
+          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <button
+              onClick={toggleTheme}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'var(--text-main)',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '8px'
+              }}
+              aria-label="Toggle theme"
+            >
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+
+            {/* Circular Profile Avatar Dropdown */}
+            <div style={{ position: 'relative' }}>
+              <button
+                onClick={() => setIsUserMenuOpen(prev => !prev)}
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  border: '1px solid var(--border)',
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  color: 'var(--accent)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '13px',
+                  fontWeight: 800,
+                  fontFamily: 'var(--font-mono)',
+                  cursor: 'pointer',
+                  padding: 0
+                }}
+              >
+                {user?.username ? user.username.charAt(0).toUpperCase() : 'U'}
+              </button>
+
+              {isUserMenuOpen && (
+                <>
+                  <div 
+                    onClick={() => setIsUserMenuOpen(false)}
+                    style={{ position: 'fixed', top: 0, bottom: 0, left: 0, right: 0, zIndex: 998 }}
+                  />
+                  <div style={{
+                    position: 'absolute',
+                    top: '40px',
+                    right: 0,
+                    background: 'var(--bg-surface)',
+                    border: '1px solid var(--border)',
+                    borderRadius: '8px',
+                    padding: '8px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '4px',
+                    minWidth: '160px',
+                    zIndex: 999,
+                    boxShadow: '0 8px 30px rgba(0, 0, 0, 0.5)'
+                  }}>
+                    <div
+                      onClick={() => { setActiveTab('buy_credits'); setIsUserMenuOpen(false); }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '10px 12px',
+                        cursor: 'pointer',
+                        borderRadius: '4px',
+                        fontSize: '10px',
+                        fontFamily: 'var(--font-mono)',
+                        fontWeight: 800,
+                        color: 'var(--accent)',
+                        background: 'rgba(0, 245, 212, 0.05)'
+                      }}
+                    >
+                      <Coins size={11} />
+                      <span>{credits} CREDITS</span>
+                    </div>
+
+                    <div
+                      onClick={() => { setActiveTab('settings'); setIsUserMenuOpen(false); }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '10px 12px',
+                        cursor: 'pointer',
+                        borderRadius: '4px',
+                        fontSize: '10px',
+                        fontFamily: 'var(--font-mono)',
+                        fontWeight: 800,
+                        color: 'var(--text-main)'
+                      }}
+                    >
+                      <Settings size={11} />
+                      <span>SETTINGS</span>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
         </div>
 
         <Sidebar
