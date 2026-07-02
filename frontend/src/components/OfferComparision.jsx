@@ -12,7 +12,7 @@ const OfferComparision = () => {
     const [uploadingB, setUploadingB] = useState(false);
     const [uploadError, setUploadError] = useState('');
 
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+    const API_URL = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:8080`;
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -152,17 +152,15 @@ const OfferComparision = () => {
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '32px', color: 'var(--text-main)' }}>
             {/* Header */}
-            <div style={{ marginBottom: '32px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                    <Scale size={24} style={{ color: 'var(--primary)' }} />
-                    <span style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--primary)', fontFamily: 'var(--font-mono)' }}>
-                        Comparative Audit //
-                    </span>
+            <div className="view-header">
+                <div className="dash-tag" style={{ marginBottom: '10px' }}>
+                    <span className="dash-pulse-dot" />
+                    <span>COMPARATIVE AUDIT PORTAL</span>
                 </div>
-                <h2 style={{ fontSize: '28px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em', margin: 0 }}>
+                <h1 className="view-title">
                     Multiple Offer Comparison
-                </h2>
-                <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginTop: '6px' }}>
+                </h1>
+                <p className="view-subtitle">
                     Compare two audited quotes side-by-side to highlight payment deltas, hidden markups, and identify the better offer.
                 </p>
             </div>
@@ -192,26 +190,30 @@ const OfferComparision = () => {
                                 <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '10px', fontFamily: 'var(--font-mono)' }}>
                                     Select Deal A //
                                 </label>
-                                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 42px', gap: '8px', alignItems: 'center', width: '100%' }}>
                                     <select
                                         value={dealAId}
                                         onChange={(e) => setDealAId(e.target.value)}
                                         className="form-input"
-                                        style={{ flex: 1, minWidth: '0' }}
+                                        style={{ width: '100%', minWidth: 0 }}
                                     >
-                                        <option value="">-- Choose first audited contract --</option>
+                                        <option value="">Select Deal A...</option>
                                         {contract
                                             .filter(c => c._id !== dealBId)
-                                            .map(c => (
-                                                <option key={c._id} value={c._id}>
-                                                    {c.fileName} (Score: {c.analysis.fairnessScore}/100)
-                                                </option>
-                                            ))
+                                            .map(c => {
+                                                const truncated = c.fileName.length > 20 ? c.fileName.substring(0, 17) + '...' : c.fileName;
+                                                return (
+                                                    <option key={c._id} value={c._id}>
+                                                        {truncated} ({c.analysis.fairnessScore})
+                                                    </option>
+                                                );
+                                            })
                                         }
                                     </select>
                                     <label className="btn" style={{ 
-                                        padding: '10px 14px', 
+                                        padding: 0, 
                                         height: '42px',
+                                        width: '42px',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
@@ -239,26 +241,30 @@ const OfferComparision = () => {
                                 <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '10px', fontFamily: 'var(--font-mono)' }}>
                                     Select Deal B //
                                 </label>
-                                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 42px', gap: '8px', alignItems: 'center', width: '100%' }}>
                                     <select
                                         value={dealBId}
                                         onChange={(e) => setDealBId(e.target.value)}
                                         className="form-input"
-                                        style={{ flex: 1, minWidth: '0' }}
+                                        style={{ width: '100%', minWidth: 0 }}
                                     >
-                                        <option value="">-- Choose second audited contract --</option>
+                                        <option value="">Select Deal B...</option>
                                         {contract
                                             .filter(c => c._id !== dealAId)
-                                            .map(c => (
-                                                <option key={c._id} value={c._id}>
-                                                    {c.fileName} (Score: {c.analysis.fairnessScore}/100)
-                                                </option>
-                                            ))
+                                            .map(c => {
+                                                const truncated = c.fileName.length > 20 ? c.fileName.substring(0, 17) + '...' : c.fileName;
+                                                return (
+                                                    <option key={c._id} value={c._id}>
+                                                        {truncated} ({c.analysis.fairnessScore})
+                                                    </option>
+                                                );
+                                            })
                                         }
                                     </select>
                                     <label className="btn" style={{ 
-                                        padding: '10px 14px', 
+                                        padding: 0, 
                                         height: '42px',
+                                        width: '42px',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
