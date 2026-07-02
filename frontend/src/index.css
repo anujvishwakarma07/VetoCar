@@ -86,16 +86,22 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Custom Scrollbars */
+/* Custom Scrollbars (Robust global styles for dev and production) */
+html, body, * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) var(--bg-main);
+}
+
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 4px !important;
+  height: 4px !important;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-main);
+  background: var(--bg-main) !important;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: var(--border) !important;
+  border-radius: 4px !important;
 }
 
 /* Base Layout Shell */
