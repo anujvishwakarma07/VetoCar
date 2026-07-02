@@ -2564,4 +2564,20 @@ select option {
 }
 
 
+/* Landing page content blur wrapper for production support */
+.landing-page-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  transition: filter 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.landing-page-content.blurred {
+  filter: blur(16px);
+  pointer-events: none;
+}
+
+
+
 

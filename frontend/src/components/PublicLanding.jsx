@@ -295,7 +295,8 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
       </div>
 
       {/* ── Sticky Glassmorphic Header ── */}
-      <header className="glass-panel" style={{
+      <div className={`landing-page-content ${showAuth ? 'blurred' : ''}`}>
+        <header className="glass-panel" style={{
         position: 'sticky', top: 0, zIndex: 999,
         borderBottom: '1px solid var(--border)',
         padding: '0 32px', display: 'flex', alignItems: 'center',
@@ -816,7 +817,8 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
       }}>
         <span>© {new Date().getFullYear()} VETOCAR. DESIGN AND DEVELOPED BY ANUJ VISHWAKARMA.</span>
         <span>DESIGNED FOR AUTOMOTIVE INTELLIGENCE</span>
-      </footer>
+        </footer>
+      </div>
     </div>
   );
 };
