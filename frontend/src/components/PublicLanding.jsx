@@ -296,7 +296,14 @@ const PublicLanding = ({ setIsAuthenticated, setUser, theme, toggleTheme }) => {
           </button>
         </form>
 
-        <div style={{ marginTop: 'auto', borderTop: '1px solid var(--border)', paddingTop: '20px', textAlign: 'center' }}>
+        <div style={{
+          marginTop: 'auto',
+          borderTop: '1px solid var(--border)',
+          paddingTop: '20px',
+          paddingBottom: '24px',
+          textAlign: 'center',
+          flexShrink: 0
+        }}>
           <button
             type="button"
             onClick={() => { setIsRegister(!isRegister); setError(''); setSuccess(''); }}
