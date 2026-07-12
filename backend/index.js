@@ -33,7 +33,7 @@ app.use('/api/feedback', feedbackRoutes);
 
 //Testing route
 app.get('/', (req, res) => {
-    res.send("UPDATE : Ai car lease assistand API is running...");
+    res.send("UPDATE-2 : Ai car lease assistand API is running...");
 })
 
 
