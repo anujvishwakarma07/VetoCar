@@ -3,6 +3,9 @@
 
 VetoCar is an advanced, production-ready full-stack web application engineered to protect car buyers and lessees from predatory dealership markups, hidden fees, and manipulated leasing worksheets. By combining modern AI document auditing with official government vehicle database checks and real-time negotiation coaching, VetoCar levels the playing field between consumers and dealerships.
 
+### Repository Description (Quick View)
+**VetoCar helps car buyers detect hidden dealer markups by auditing lease/purchase PDFs with AI, validating vehicle details with NHTSA data, and generating negotiation-ready responses.**
+
 ---
 
 ## 👋 About VetoCar (Quick Recruiter Overview)
