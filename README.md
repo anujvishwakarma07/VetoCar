@@ -5,6 +5,22 @@ VetoCar is an advanced, production-ready full-stack web application engineered t
 
 ---
 
+## 👋 About VetoCar (Quick Recruiter Overview)
+
+VetoCar is a full-stack AI product I built to help buyers understand whether a car lease or purchase deal is fair before signing.
+
+### What this project demonstrates
+- **Product thinking:** Solves a real-world consumer pain point (hidden dealership costs and confusing contract language).
+- **Full-stack execution:** Designed and implemented both client and server architecture end-to-end.
+- **AI integration in production flows:** Uses Gemini to parse and analyze contract data into actionable insights.
+- **Data-backed decision support:** Combines AI findings with NHTSA vehicle/recall data and side-by-side deal comparison.
+- **Security-aware implementation:** Uses JWT-protected APIs, guarded middleware, and controlled access via a credit system.
+
+### Outcome for users
+Users can upload a dealership worksheet, get risk flags and a fairness score, compare multiple offers, and generate negotiation responses that are grounded in the actual numbers from their deal.
+
+---
+
 ## 🚀 Key Features
 
 ### 1. Secure Access Gateway (User Authentication)
